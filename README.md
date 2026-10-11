@@ -26,7 +26,7 @@ Hay dos interfaces, para dos perfiles distintos: un **panel de gestión privado*
 | Contenedores | Docker + Docker Compose |
 | Control de versiones | Git · `main` + ramas de trabajo · Conventional Commits |
 
-> La **justificación completa de cada tecnología**, con las alternativas descartadas y el motivo, está en [`docs/hito0-tecnologias.md`](docs/hito0-tecnologias.md) (entregable del Hito 0).
+> La **justificación completa de cada tecnología**, con las alternativas descartadas y el motivo, está en [`docs/hito0-tecnologias.md`](docs/hito0-tecnologias.md).
 
 ---
 
