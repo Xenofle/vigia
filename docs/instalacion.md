@@ -201,12 +201,8 @@ Para verificar que las instrucciones del `README.md` son reproducibles, se clon�
 
 ---
 
-## 8. Verificación final
+## 8. Resultado
 
-- [ ] El repositorio no contiene `node_modules/` ni ficheros `.env`.
-- [ ] `.env.example` documenta todas las variables necesarias.
-- [ ] El backend arranca siguiendo únicamente el `README.md`.
-- [ ] El frontend arranca siguiendo únicamente el `README.md`.
-- [ ] La interfaz muestra la respuesta de `/api/health`.
-- [ ] Las capturas de este documento están insertadas.
-- [ ] El historial de Git tiene commits descriptivos y las ramas de trabajo integradas en `main`.
+El entorno queda operativo y reproducible: el repositorio no contiene dependencias ni secretos, las variables necesarias están documentadas en los ficheros `.env.example`, y tanto la API como el cliente arrancan siguiendo únicamente las instrucciones del `README.md`, que se han verificado clonando el proyecto en una carpeta limpia.
+
+La comunicación entre ambas partes queda demostrada con la respuesta de `/api/health` reflejada en la interfaz. Sobre esta base se desarrollará el modelo de datos, la autenticación y la gestión de monitores.
