@@ -25,7 +25,7 @@ Cada elección se justifica frente a la alternativa que se ha descartado.
 
 ### Guía de estilo / diseño
 
-**Tailwind CSS** con un conjunto propio de tokens de color, espaciado y tipografía definidos en `tailwind.config.js`.
+**Tailwind CSS** con un conjunto propio de tokens de color, espaciado y tipografía definidos en un bloque `@theme` dentro de la hoja de estilos principal.
 
 El proyecto tiene dos interfaces con necesidades opuestas: un panel técnico denso, con mucha información por pantalla, y una página pública minimalista. Un framework de componentes cerrado como Bootstrap impondría el mismo aspecto a ambas y obligaría a pelearse con sus estilos. Tailwind aporta un sistema de utilidades coherente sin imponer componentes, de modo que los tokens se comparten entre las dos interfaces pero cada una mantiene su propio lenguaje visual.
 
@@ -120,7 +120,7 @@ La planificación de las comprobaciones se implementa con un **planificador prop
 - **Sistema:** Git, alojado en GitHub.
 - **Rama principal:** `main`, protegida. Nunca se trabaja directamente sobre ella.
 - **Ramas de trabajo:** `feat/<descripcion>`, `fix/<descripcion>`, `docs/<descripcion>`, `chore/<descripcion>`.
-- **Integración:** mediante *pull request*, incluso siendo un proyecto individual, para dejar registro escrito de cada bloque funcional y facilitar el seguimiento por parte del profesorado.
+- **Integración:** mediante *pull request*, incluso siendo un proyecto individual, para dejar registro escrito de cada bloque funcional y poder revisar los cambios antes de integrarlos.
 - **Convención de commits:** [Conventional Commits](https://www.conventionalcommits.org/), en español.
   Ejemplos: `feat(monitors): alta y edición de monitores HTTP`, `fix(worker): reinicio del contador de fallos tras recuperación`, `docs(readme): justificación de tecnologías`.
 - **Etiquetas:** una etiqueta por hito del proyecto (`hito-0`, `hito-1`, …).
@@ -147,17 +147,17 @@ La planificación de las comprobaciones se implementa con un **planificador prop
 
 ```
 vigia/
-├── api/                  # API REST, WebSocket y motor de comprobaciones
+├── backend/              # API REST, WebSocket y motor de comprobaciones
 │   ├── src/
+│   │   ├── config/
+│   │   ├── middlewares/
 │   │   ├── routes/
 │   │   ├── services/
-│   │   ├── worker/       # planificador y ejecución de comprobaciones
-│   │   └── lib/
+│   │   └── worker/       # planificador y ejecución de comprobaciones
 │   └── prisma/           # esquema y migraciones
-├── web/                  # cliente React (panel privado y página pública)
+├── frontend/             # cliente React (panel privado y página pública)
 │   └── src/
 ├── docs/                 # documentación, diagramas, OpenAPI
-├── docker/               # Dockerfiles y configuración de Nginx
 ├── docker-compose.yml
 └── README.md
 ```

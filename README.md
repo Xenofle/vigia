@@ -1,9 +1,23 @@
-# Hito 0 — Definición tecnológica
+# Vigía — Plataforma de monitorización y página de estado
 
-Vigía · Plataforma de monitorización y página de estado
 Proyecto Intermodular — 2º de Desarrollo de Aplicaciones Web (DAW)
 IES Severo Ochoa, Elche · Curso 2026/2027
 Autor: José Javier Contreras Morillo
+
+---
+
+## Índice
+
+1. [Descripción](#descripción)
+2. [Justificación](#justificación)
+3. [Tecnologías](#tecnologías)
+4. [Estructura del repositorio](#estructura-del-repositorio)
+5. [Requisitos previos](#requisitos-previos)
+6. [Puesta en marcha en local](#puesta-en-marcha-en-local)
+7. [Alternativa: arranque con Docker](#alternativa-arranque-con-docker)
+8. [Comandos disponibles](#comandos-disponibles)
+9. [Flujo de trabajo con Git](#flujo-de-trabajo-con-git)
+10. [Estado del proyecto](#estado-del-proyecto)
 
 ---
 
@@ -17,15 +31,27 @@ Cuando un monitor falla varias veces seguidas, el sistema lo marca como caído, 
 
 Hay dos perfiles de usuario y, por tanto, dos interfaces: el **personal técnico**, que configura monitores y gestiona incidencias desde el panel privado; y el **usuario final**, que consulta una **página de estado pública** con el estado actual de cada servicio, el historial de disponibilidad de los últimos 90 días y las incidencias publicadas.
 
+## Justificación
+
+La monitorización es una necesidad real de cualquier organización con servicios en línea, y existen productos comerciales equivalentes que validan el planteamiento. Desde el punto de vista académico, el proyecto obliga a trabajar procesos en segundo plano, gestión de series temporales, comunicación en tiempo real y despliegue con contenedores, que son competencias directamente aplicables en el entorno profesional.
+
 ---
 
 ## Tecnologías
 
-Cada elección se justifica frente a la alternativa que se ha descartado.
+Resumen de la pila y, a continuación, la justificación de cada elección frente a la alternativa descartada.
+
+| Capa | Tecnología |
+|---|---|
+| Cliente | React 19 + Vite + Tailwind CSS 4 |
+| Servidor | Node.js 22 + Express 5 |
+| Base de datos | PostgreSQL 16 (a partir del Hito 2) |
+| Contenedores | Docker + Docker Compose |
+| Control de versiones | Git · `main` + ramas de trabajo · Conventional Commits |
 
 ### Guía de estilo / diseño
 
-**Tailwind CSS** con un conjunto propio de tokens de color, espaciado y tipografía definidos en `tailwind.config.js`.
+**Tailwind CSS** con un conjunto propio de tokens de color, espaciado y tipografía definidos en el bloque `@theme`.
 
 El proyecto tiene dos interfaces con necesidades opuestas: un panel técnico denso, con mucha información por pantalla, y una página pública minimalista. Un framework de componentes cerrado como Bootstrap impondría el mismo aspecto a ambas y obligaría a pelearse con sus estilos. Tailwind aporta un sistema de utilidades coherente sin imponer componentes, de modo que los tokens se comparten entre las dos interfaces pero cada una mantiene su propio lenguaje visual.
 
@@ -86,200 +112,159 @@ La API se documenta con OpenAPI porque es el estándar del sector y permite prob
 
 | Librería | Función | Motivo |
 |---|---|---|
-| `prisma` | ORM y migraciones | Tipado del modelo y control de versiones del esquema con migraciones reproducibles |
-| `jsonwebtoken` | Autenticación | Sesión sin estado, adecuada para una API consumida por una SPA |
-| `argon2` | Cifrado de contraseñas | Algoritmo recomendado actualmente frente a bcrypt |
-| `zod` | Validación de entrada | Valida el cuerpo de las peticiones en un único punto y genera los tipos |
-| `socket.io` | Tiempo real | Reconexión automática y salas, frente a WebSocket nativo |
-| `nodemailer` | Envío de alertas | Estándar de facto para SMTP en Node |
-| `undici` / `net` | Comprobaciones HTTP y TCP | Cliente HTTP moderno con control de tiempo de espera; módulo nativo para los sockets |
-| `pino` | Registro de eventos | Registro estructurado en JSON, útil para depurar el motor |
+| `express` | Framework HTTP | Minimalista y suficiente para una API REST |
+| `cors` | Control de orígenes | El cliente y la API se sirven en puertos distintos |
+| `dotenv` | Variables de entorno | Carga la configuración sin incrustarla en el código |
+| `prisma` | ORM y migraciones *(Hito 2)* | Tipado del modelo y migraciones reproducibles |
+| `jsonwebtoken` | Autenticación *(Hito 2)* | Sesión sin estado, adecuada para una API consumida por una SPA |
+| `argon2` | Cifrado de contraseñas *(Hito 2)* | Algoritmo recomendado actualmente frente a bcrypt |
+| `zod` | Validación de entrada *(Hito 2)* | Valida el cuerpo de las peticiones en un único punto |
+| `socket.io` | Tiempo real *(Hito 3)* | Reconexión automática y salas, frente a WebSocket nativo |
+| `nodemailer` | Envío de alertas *(Hito 3)* | Estándar de facto para SMTP en Node |
 
 **Cliente**
 
 | Librería | Función | Motivo |
 |---|---|---|
-| `react-router` | Enrutado | Estándar para navegación en React |
-| `@tanstack/react-query` | Estado del servidor | Caché, revalidación y estados de carga sin escribirlos a mano |
-| `socket.io-client` | Tiempo real | Contraparte del servidor |
-| `recharts` | Gráficas de latencia y disponibilidad | Construida sobre componentes de React, suficiente para gráficas de serie temporal |
+| `react` / `react-dom` | Interfaz | Modelo declarativo, idóneo para datos que cambian solos |
+| `vite` | Empaquetador y servidor de desarrollo | Arranque y recarga muy rápidos |
 | `tailwindcss` | Estilos | Ver apartado de guía de diseño |
+| `@tanstack/react-query` | Estado del servidor *(Hito 2)* | Caché y revalidación sin escribirlas a mano |
+| `recharts` | Gráficas *(Hito 3)* | Construida sobre componentes de React |
 
-**Calidad**
+**Calidad** *(a partir del Hito 2)*: `vitest` para pruebas unitarias, `supertest` para pruebas de integración de la API, y `eslint` con `prettier` para análisis estático y formato uniforme.
 
-| Librería | Función |
-|---|---|
-| `vitest` | Pruebas unitarias (máquina de estados, cálculo de disponibilidad) |
-| `supertest` | Pruebas de integración de la API |
-| `eslint` + `prettier` | Análisis estático y formato uniforme |
+La planificación de las comprobaciones se implementará con un **planificador propio** basado en temporizadores, sin `BullMQ` ni Redis. Para el volumen previsto (unos 100 monitores con intervalo de 60 segundos) una cola distribuida añadiría un servicio más al despliegue y un concepto más que mantener, sin aportar nada. Queda documentado como línea de evolución si el volumen creciera.
 
-La planificación de las comprobaciones se implementa con un **planificador propio** basado en temporizadores, sin `BullMQ` ni Redis. Para el volumen previsto (unos 100 monitores con intervalo de 60 segundos) una cola distribuida añadiría un servicio más al despliegue y un concepto más que mantener, sin aportar nada. Queda documentado como línea de evolución si el volumen creciera.
+### Otros: contenedores y despliegue
 
-### Control de versiones y flujo de trabajo
+**Docker** y **Docker Compose**, incorporados desde el inicio del desarrollo y no al final. El sistema se compone de varios servicios y Compose permite levantar el conjunto con un único comando, garantizando que el entorno de desarrollo y el de despliegue son equivalentes.
 
-- **Sistema:** Git, alojado en GitHub.
-- **Rama principal:** `main`, protegida. Nunca se trabaja directamente sobre ella.
-- **Ramas de trabajo:** `feat/<descripcion>`, `fix/<descripcion>`, `docs/<descripcion>`, `chore/<descripcion>`.
-- **Integración:** mediante *pull request*, incluso siendo un proyecto individual, para dejar registro escrito de cada bloque funcional y poder revisar los cambios antes de integrarlos.
-- **Convención de commits:** [Conventional Commits](https://www.conventionalcommits.org/), en español.
-  Ejemplos: `feat(monitors): alta y edición de monitores HTTP`, `fix(worker): reinicio del contador de fallos tras recuperación`, `docs(readme): justificación de tecnologías`.
-- **Etiquetas:** una etiqueta por hito del proyecto (`hito-0`, `hito-1`, …).
-
-### Otros
-
-**Contenedores:** **Docker** y **Docker Compose**, incorporados desde el inicio del desarrollo y no al final. El sistema se compone de varios servicios (base de datos, API, motor de comprobaciones, cliente y proxy inverso), y Compose permite levantar el conjunto con un único comando y garantizar que el entorno de desarrollo y el de despliegue son equivalentes.
-
-| Servicio | Contenido |
-|---|---|
-| `db` | PostgreSQL con volumen persistente |
-| `api` | API REST y servidor WebSocket |
-| `worker` | Motor de comprobaciones (misma imagen que `api`, distinto comando) |
-| `web` | Cliente React compilado y servido de forma estática |
-| `proxy` | Nginx como proxy inverso y terminación TLS |
-
-**Integración continua:** **GitHub Actions**. En cada *push* se ejecutan el análisis estático, las pruebas y la construcción de las imágenes; en `main`, además, se publican las imágenes.
+**Integración continua:** GitHub Actions. En cada *push* se ejecutarán el análisis estático, las pruebas y la construcción de las imágenes.
 
 **Entorno de despliegue previsto:** servidor virtual privado con Docker y Nginx, certificado TLS mediante Let's Encrypt, variables de entorno en fichero `.env` fuera del repositorio y copia de seguridad diaria de la base de datos con `pg_dump`.
 
 ---
 
-## Estructura prevista del repositorio
+## Estructura del repositorio
 
 ```
 vigia/
-├── api/                  # API REST, WebSocket y motor de comprobaciones
+├── backend/            # API REST (Node + Express)
 │   ├── src/
+│   │   ├── config/     # carga y validación de variables de entorno
+│   │   ├── middlewares/
 │   │   ├── routes/
-│   │   ├── services/
-│   │   ├── worker/       # planificador y ejecución de comprobaciones
-│   │   └── lib/
-│   └── prisma/           # esquema y migraciones
-├── web/                  # cliente React (panel privado y página pública)
-│   └── src/
-├── docs/                 # documentación, diagramas, OpenAPI
-├── docker/               # Dockerfiles y configuración de Nginx
+│   │   ├── app.js      # construcción de la aplicación Express
+│   │   └── server.js   # arranque del servidor
+│   ├── .env.example
+│   └── Dockerfile
+├── frontend/           # Cliente web (React + Vite)
+│   ├── src/
+│   │   ├── api/        # cliente de la API
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   ├── .env.example
+│   └── Dockerfile
+├── docs/               # documentación técnica
+├── .env.example        # variables usadas por Docker Compose
 ├── docker-compose.yml
 └── README.md
 ```
 
 ---
 
-## Estado del proyecto
+## Requisitos previos
 
-En desarrollo. Hito 0 completado: repositorio creado y definición tecnológica documentada.
-# Hito 1 — Instalación y configuración del entorno
-
-Vigía · Proyecto Intermodular 2º de Desarrollo de Aplicaciones Web (DAW)
-Autor: José Javier Contreras Morillo
-
-Este documento recoge cómo se ha montado el entorno de desarrollo, las pruebas realizadas para comprobar que funciona y los problemas encontrados durante el proceso. Las instrucciones para que una persona ajena al proyecto lo levante están en el [`README.md`](../README.md); aquí se documenta el proceso seguido.
-
----
-
-## 1. Entorno de trabajo
-
-| Elemento | Versión utilizada |
-|---|---|
-| Sistema operativo | *(completar: Windows 11 / Ubuntu 24.04 …)* |
-| Node.js | 22.x |
-| npm | 10.x |
-| Git | 2.x |
-| Docker | *(completar si se ha usado)* |
-| Editor | *(completar: VS Code …)* |
+| Herramienta | Versión mínima | Comprobación |
+|---|---|---|
+| Node.js | 20.19 o 22.12 en adelante (lo exige Vite 8) | `node -v` |
+| npm | 10 | `npm -v` |
+| Git | 2.x | `git --version` |
+| Docker *(opcional)* | 24 | `docker --version` |
 
 ---
 
-## 2. Creación del repositorio
+## Puesta en marcha en local
 
-1. Repositorio creado en GitHub con el nombre `vigia`, rama principal `main`.
-2. Añadido el profesor como colaborador *(solo si el repositorio es privado)*.
-3. Clonado por HTTPS con token personal de acceso. **No se usa SSH**, porque el acceso por SSH está bloqueado en la red del centro (WIFI_EDU).
+Los comandos están pensados para copiarse y pegarse en orden. Se necesitan **dos terminales**: una para el backend y otra para el frontend.
+
+### 1. Clonar el repositorio
 
 ```bash
 git clone https://github.com/Xenofle/vigia.git
 cd vigia
 ```
 
-4. Estrategia de ramas: `main` como rama estable y una rama de trabajo por bloque funcional, integrada mediante *pull request*. Al ser un proyecto individual no se emplea rama `develop` intermedia.
+### 2. Configurar las variables de entorno
 
 ```bash
-git checkout -b feat/boilerplate-backend
+cp backend/.env.example backend/.env
+cp frontend/.env.example frontend/.env
 ```
 
----
+Valores por defecto, válidos para desarrollo sin tocar nada:
 
-## 3. Estructura de carpetas
+| Fichero | Variable | Valor por defecto | Para qué sirve |
+|---|---|---|---|
+| `backend/.env` | `NODE_ENV` | `development` | Entorno de ejecución |
+| `backend/.env` | `PORT` | `4000` | Puerto en el que escucha la API |
+| `backend/.env` | `CORS_ORIGIN` | `http://localhost:5173` | Origen autorizado a llamar a la API |
+| `backend/.env` | `DATABASE_URL` | `postgresql://vigia:vigia@localhost:5432/vigia` | Conexión a PostgreSQL. **Aún no se usa**, se incorpora en el Hito 2 |
+| `frontend/.env` | `VITE_API_URL` | `http://localhost:4000/api` | URL base de la API que consume el cliente |
 
-Estructura de carpetas del proyecto:
-
-```
-vigia/
-├── backend/
-├── frontend/
-├── docs/
-├── .gitignore
-├── .env.example
-└── README.md
-```
-
-El `.gitignore` de la raíz excluye `node_modules/`, los ficheros `.env` y las carpetas de compilación (`dist/`, `build/`), de modo que en el repositorio no hay ni dependencias ni secretos. Solo se versionan los ficheros `.env.example`, que documentan qué variables hacen falta sin incluir ningún valor sensible.
-
----
-
-## 4. Instalación del backend (Node + Express)
+### 3. Instalar las dependencias
 
 ```bash
 cd backend
-npm init -y
-npm install express cors dotenv
+npm install
+cd ../frontend
+npm install
+cd ..
 ```
 
-Ajustes realizados sobre el `package.json` generado:
+### 4. Preparar la base de datos
 
-- `"type": "module"` para usar sintaxis de módulos ECMAScript (`import`/`export`) en lugar de CommonJS.
-- Scripts `dev` (con `node --watch`, recarga automática nativa de Node 22, sin necesidad de `nodemon`) y `start` (arranque simple, el que se usa dentro del contenedor).
+**No es necesario en este hito.** El proyecto todavía no tiene modelo de datos ni migraciones: el servicio de PostgreSQL está declarado en `docker-compose.yml` y la variable `DATABASE_URL` queda preparada para el Hito 2, pero la API arranca y funciona sin base de datos.
 
-Estructura del código fuente:
+### 5. Arrancar el backend
 
-| Fichero | Responsabilidad |
-|---|---|
-| `src/config/env.js` | Carga de variables de entorno con valores por defecto; detiene el arranque si falta alguna obligatoria |
-| `src/routes/health.routes.js` | Endpoint `GET /api/health` |
-| `src/middlewares/errores.js` | Respuesta 404 en JSON y manejador de errores centralizado |
-| `src/app.js` | Construcción de la aplicación Express (sin arrancarla) |
-| `src/server.js` | Arranque del servidor |
+En la primera terminal, desde la raíz del proyecto:
 
-Se separa `app.js` de `server.js` de forma deliberada: así, en hitos posteriores, las pruebas automáticas podrán montar la aplicación sin ocupar un puerto.
+```bash
+cd backend
+npm run dev
+```
 
----
+Queda disponible en **http://localhost:4000**, con el endpoint de comprobación en **http://localhost:4000/api/health**.
 
-## 5. Instalación del frontend (React + Vite)
+### 6. Arrancar el frontend
+
+En la segunda terminal, también desde la raíz del proyecto:
 
 ```bash
 cd frontend
-npm init -y
-npm install react react-dom
-npm install -D vite @vitejs/plugin-react tailwindcss @tailwindcss/vite
+npm run dev
 ```
 
-Configuración:
+Queda disponible en **http://localhost:5173**.
 
-- `vite.config.js` registra el plugin de React y el de Tailwind CSS v4, y fija el puerto 5173 con `host: true` para que el servidor de desarrollo sea accesible desde el contenedor.
-- `src/index.css` importa Tailwind con `@import 'tailwindcss'` y declara en un bloque `@theme` los colores semánticos de estado (activo, degradado, caído), que se reutilizarán en el panel y en la página pública.
-- `src/api/cliente.js` centraliza la URL base de la API, leída de `VITE_API_URL`, para no repetirla por los componentes.
+### 7. Comprobar que funciona
 
----
-
-## 6. Pruebas de funcionamiento
-
-### 6.1 El backend arranca y responde
+**a) La API responde por sí sola:**
 
 ```bash
-cd backend && npm run dev
 curl http://localhost:4000/api/health
 ```
 
-Respuesta obtenida:
+En **PowerShell**, `curl` es un alias de `Invoke-WebRequest` y muestra un aviso de seguridad. Usa cualquiera de estas dos formas:
+
+```powershell
+curl.exe http://localhost:4000/api/health
+Invoke-RestMethod http://localhost:4000/api/health
+```
+
+Respuesta esperada:
 
 ```json
 {
@@ -292,64 +277,71 @@ Respuesta obtenida:
 }
 ```
 
-Se comprueba además que una ruta inexistente devuelve JSON y no una página de error HTML:
+**b) El frontend se comunica con la API:**
 
-```bash
-curl http://localhost:4000/api/nada
-# {"error":"Recurso no encontrado","ruta":"/api/nada"}
-```
+Abre **http://localhost:5173** en el navegador. Si la comunicación funciona, la tarjeta muestra el indicador verde **«API operativa»** junto con el servicio, la versión, el entorno y el tiempo activo que ha devuelto el backend.
 
-> **Captura 1 — Backend arrancado y respuesta de `/api/health`**
-> *(insertar aquí la captura: terminal con el servidor arrancado y la respuesta de `curl` o del navegador)*
-
-### 6.2 El frontend arranca
-
-```bash
-cd frontend && npm run dev
-```
-
-> **Captura 2 — Servidor de desarrollo de Vite arrancado**
-> *(insertar aquí la captura de la terminal mostrando la URL local)*
-
-### 6.3 Comunicación entre frontend y backend
-
-Con ambos servidores en marcha, al abrir http://localhost:5173 la aplicación realiza una petición a `/api/health` y muestra en pantalla los datos devueltos por el backend, lo que demuestra que las dos piezas se comunican.
-
-> **Captura 3 — Interfaz mostrando la respuesta de la API**
-> *(insertar aquí la captura del navegador con el indicador «API operativa» y los datos)*
-
-> **Captura 4 — Pestaña de red del navegador**
-> *(opcional pero recomendable: la petición a `/api/health` con código 200, que prueba la comunicación de forma inequívoca)*
-
-### 6.4 Compilación de producción
-
-```bash
-cd frontend && npm run build
-```
-
-La compilación finaliza sin errores y genera la carpeta `dist/`.
+Si en su lugar aparece el aviso rojo «No se ha podido contactar con la API», revisa que el backend esté arrancado en el puerto 4000 y que `VITE_API_URL` apunte a él. Tras cambiar un `.env`, reinicia el servidor de desarrollo correspondiente.
 
 ---
 
-## 7. Problemas encontrados y soluciones
+## Alternativa: arranque con Docker
 
-| # | Problema | Causa | Solución |
-|---|---|---|---|
-| 1 | El nombre del repositorio aparecía como `Vig-a` | GitHub no admite caracteres no ASCII en el nombre del repositorio y sustituye la tilde | Nombrar el repositorio `vigia` sin tilde y reservar «Vigía» para el título del proyecto y la interfaz |
-| 2 | *(completar)* Error de CORS al llamar a la API desde el navegador | El navegador bloquea las peticiones entre orígenes distintos (5173 → 4000) si el servidor no lo autoriza | Middleware `cors` en el backend, con el origen permitido configurado en `CORS_ORIGIN` |
-| 3 | *(completar)* Los cambios en `.env` no se aplicaban | Vite solo lee las variables de entorno al arrancar, y únicamente expone al navegador las que empiezan por `VITE_` | Reiniciar el servidor de desarrollo tras modificar el fichero y respetar el prefijo `VITE_` |
-| 4 | *(completar con cualquier otro problema real que surja)* | | |
+Levanta la base de datos, la API y el cliente web con un solo comando:
 
-> Los problemas marcados como *(completar)* están redactados a partir de los fallos habituales en este montaje. Sustituye o amplía la tabla con los que te ocurran realmente: el documento debe reflejar tu proceso.
+```bash
+cp .env.example .env
+docker compose up --build
+```
+
+| Servicio | Contenedor | URL / puerto |
+|---|---|---|
+| `web` | `vigia-web` | http://localhost:5173 |
+| `api` | `vigia-api` | http://localhost:4000/api/health |
+| `db` | `vigia-db` | `localhost:5432` |
+
+`docker compose up --build` reconstruye las imágenes; en arranques posteriores basta con `docker compose up`. Para detenerlo todo:
+
+```bash
+docker compose down          # detiene y elimina los contenedores
+docker compose down -v       # además, borra el volumen de la base de datos
+```
+
+El servicio `api` espera a que PostgreSQL esté listo mediante un *healthcheck*, de modo que el orden de arranque es siempre correcto.
 
 ---
 
-## 8. Verificación final
+## Comandos disponibles
 
-- [ ] El repositorio no contiene `node_modules/` ni ficheros `.env`.
-- [ ] `.env.example` documenta todas las variables necesarias.
-- [ ] El backend arranca siguiendo únicamente el `README.md`.
-- [ ] El frontend arranca siguiendo únicamente el `README.md`.
-- [ ] La interfaz muestra la respuesta de `/api/health`.
-- [ ] Las capturas de este documento están insertadas.
-- [ ] El historial de Git tiene commits descriptivos y las ramas de trabajo integradas en `main`.
+| Comando | Carpeta | Descripción |
+|---|---|---|
+| `npm run dev` | `backend` | Arranca la API con recarga automática (`node --watch`) |
+| `npm start` | `backend` | Arranca la API sin recarga (uso en contenedor) |
+| `npm run dev` | `frontend` | Servidor de desarrollo de Vite |
+| `npm run build` | `frontend` | Compila el cliente para producción en `dist/` |
+| `npm run preview` | `frontend` | Sirve localmente la compilación de producción |
+
+---
+
+## Flujo de trabajo con Git
+
+- **`main`**: rama estable. No se trabaja directamente sobre ella; solo recibe código mediante *pull request*.
+- **Ramas de trabajo**: una por bloque funcional, con el prefijo correspondiente — `feat/<descripcion>`, `fix/<descripcion>`, `docs/<descripcion>`, `chore/<descripcion>` — que se integran en `main` cuando el bloque está terminado.
+- **Mensajes de commit**: [Conventional Commits](https://www.conventionalcommits.org/) en español.
+  Ejemplos: `feat(api): endpoint de comprobación de estado`, `docs(readme): instrucciones de arranque en local`.
+- **Etiquetas**: una por hito entregado (`hito-0`, `hito-1`, …).
+
+---
+
+## Estado del proyecto
+
+| Hito | Contenido | Estado |
+|---|---|---|
+| Hito 0 | Repositorio y definición tecnológica | Completado |
+| Hito 1 | Boilerplate, arranque en local y documentación | Completado |
+| Hito 2 | Modelo de datos, autenticación y CRUD de monitores | Pendiente |
+
+Documentación relacionada:
+
+- [`docs/hito0-tecnologias.md`](docs/hito0-tecnologias.md) — entregable del Hito 0, con la definición tecnológica recogida también en este README.
+- [`docs/instalacion.md`](docs/instalacion.md) — instalación del entorno, pruebas realizadas y problemas encontrados.

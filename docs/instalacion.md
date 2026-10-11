@@ -11,37 +11,37 @@ Este documento recoge cómo se ha montado el entorno de desarrollo, las pruebas 
 
 | Elemento | Versión utilizada |
 |---|---|
-| Sistema operativo | *(completar: Windows 11 / Ubuntu 24.04 …)* |
-| Node.js | 22.x |
+| Sistema operativo | *(completar: Windows 11 …)* |
+| Terminal | Windows PowerShell 5.1 |
+| Node.js | 22.12 o superior (lo exige Vite 8) |
 | npm | 10.x |
 | Git | 2.x |
 | Docker | *(completar si se ha usado)* |
-| Editor | *(completar: VS Code …)* |
+| Editor | *(completar: Visual Studio Code …)* |
 
 ---
 
 ## 2. Creación del repositorio
 
 1. Repositorio creado en GitHub con el nombre `vigia`, rama principal `main`.
-2. Añadido el profesor como colaborador *(solo si el repositorio es privado)*.
-3. Clonado por HTTPS con token personal de acceso. **No se usa SSH**, porque el acceso por SSH está bloqueado en la red del centro (WIFI_EDU).
+2. Clonado por HTTPS con token personal de acceso. **No se usa SSH**, porque el acceso por SSH está bloqueado en la red del centro (WIFI_EDU).
 
 ```bash
 git clone https://github.com/Xenofle/vigia.git
 cd vigia
 ```
 
-4. Estrategia de ramas: `main` como rama estable y una rama de trabajo por bloque funcional, integrada mediante *pull request*. Al ser un proyecto individual no se emplea rama `develop` intermedia.
+3. Estrategia de ramas: `main` como rama estable y una rama de trabajo por bloque funcional, integrada mediante *pull request*. Al ser un proyecto individual no se emplea rama `develop` intermedia.
 
 ```bash
 git checkout -b feat/boilerplate-backend
 ```
 
+4. Se añade un fichero `.gitattributes` con `* text=auto eol=lf` para normalizar los finales de línea, ya que el desarrollo se hace en Windows y los contenedores son Linux.
+
 ---
 
 ## 3. Estructura de carpetas
-
-Se ha creado la estructura mínima exigida por el enunciado:
 
 ```
 vigia/
@@ -49,6 +49,7 @@ vigia/
 ├── frontend/
 ├── docs/
 ├── .gitignore
+├── .gitattributes
 ├── .env.example
 └── README.md
 ```
@@ -59,7 +60,7 @@ El `.gitignore` de la raíz excluye `node_modules/`, los ficheros `.env` y las c
 
 ## 4. Instalación del backend (Node + Express)
 
-```bash
+```powershell
 cd backend
 npm init -y
 npm install express cors dotenv
@@ -68,7 +69,7 @@ npm install express cors dotenv
 Ajustes realizados sobre el `package.json` generado:
 
 - `"type": "module"` para usar sintaxis de módulos ECMAScript (`import`/`export`) en lugar de CommonJS.
-- Scripts `dev` (con `node --watch`, recarga automática nativa de Node 22, sin necesidad de `nodemon`) y `start` (arranque simple, el que se usa dentro del contenedor).
+- Scripts `dev` (con `node --watch`, recarga automática nativa de Node, sin necesidad de `nodemon`) y `start` (arranque simple, el que se usa dentro del contenedor).
 
 Estructura del código fuente:
 
@@ -86,7 +87,7 @@ Se separa `app.js` de `server.js` de forma deliberada: así, en hitos posteriore
 
 ## 5. Instalación del frontend (React + Vite)
 
-```bash
+```powershell
 cd frontend
 npm init -y
 npm install react react-dom
@@ -105,9 +106,17 @@ Configuración:
 
 ### 6.1 El backend arranca y responde
 
-```bash
-npm run dev --prefix backend
-curl http://localhost:4000/api/health
+En la primera terminal:
+
+```powershell
+cd backend
+npm run dev
+```
+
+En una segunda terminal:
+
+```powershell
+curl.exe http://localhost:4000/api/health
 ```
 
 Respuesta obtenida:
@@ -118,26 +127,33 @@ Respuesta obtenida:
   "servicio": "vigia-api",
   "version": "0.1.0",
   "entorno": "development",
-  "marcaDeTiempo": "2026-10-07T14:30:31.039Z",
-  "tiempoActivoSegundos": 2
+  "marcaDeTiempo": "2026-10-11T11:22:29.899Z",
+  "tiempoActivoSegundos": 19
 }
 ```
 
-Se comprueba además que una ruta inexistente devuelve JSON y no una página de error HTML:
+La respuesta incluye además la cabecera `Access-Control-Allow-Origin: http://localhost:5173`, lo que confirma que el CORS está configurado para el cliente.
 
-```bash
-curl http://localhost:4000/api/nada
+Se comprueba también que una ruta inexistente devuelve JSON y no una página de error HTML:
+
+```powershell
+curl.exe http://localhost:4000/api/nada
 # {"error":"Recurso no encontrado","ruta":"/api/nada"}
 ```
 
 > **Captura 1 — Backend arrancado y respuesta de `/api/health`**
-> *(insertar aquí la captura: terminal con el servidor arrancado y la respuesta de `curl` o del navegador)*
+> *(insertar aquí la captura: terminal con el servidor arrancado y la respuesta)*
 
 ### 6.2 El frontend arranca
 
-```bash
-npm run dev --prefix frontend
+En otra terminal:
+
+```powershell
+cd frontend
+npm run dev
 ```
+
+Vite indica la URL local en la que queda disponible el cliente (http://localhost:5173).
 
 > **Captura 2 — Servidor de desarrollo de Vite arrancado**
 > *(insertar aquí la captura de la terminal mostrando la URL local)*
@@ -150,15 +166,20 @@ Con ambos servidores en marcha, al abrir http://localhost:5173 la aplicación re
 > *(insertar aquí la captura del navegador con el indicador «API operativa» y los datos)*
 
 > **Captura 4 — Pestaña de red del navegador**
-> *(opcional pero recomendable: la petición a `/api/health` con código 200, que prueba la comunicación de forma inequívoca)*
+> *(la petición a `/api/health` con código 200, que prueba la comunicación de forma inequívoca)*
 
 ### 6.4 Compilación de producción
 
-```bash
-npm run build --prefix frontend
+```powershell
+cd frontend
+npm run build
 ```
 
 La compilación finaliza sin errores y genera la carpeta `dist/`.
+
+### 6.5 Comprobación de reproducibilidad
+
+Para verificar que las instrucciones del `README.md` son reproducibles, se clonó el repositorio en una carpeta distinta y se siguieron los pasos desde cero, sin usar nada del entorno ya montado. Los problemas detectados en esa prueba están recogidos en el apartado siguiente y corregidos en el `README.md`.
 
 ---
 
@@ -167,11 +188,12 @@ La compilación finaliza sin errores y genera la carpeta `dist/`.
 | # | Problema | Causa | Solución |
 |---|---|---|---|
 | 1 | El nombre del repositorio aparecía como `Vig-a` | GitHub no admite caracteres no ASCII en el nombre del repositorio y sustituye la tilde | Nombrar el repositorio `vigia` sin tilde y reservar «Vigía» para el título del proyecto y la interfaz |
-| 2 | *(completar)* Error de CORS al llamar a la API desde el navegador | El navegador bloquea las peticiones entre orígenes distintos (5173 → 4000) si el servidor no lo autoriza | Middleware `cors` en el backend, con el origen permitido configurado en `CORS_ORIGIN` |
-| 3 | *(completar)* Los cambios en `.env` no se aplicaban | Vite solo lee las variables de entorno al arrancar, y únicamente expone al navegador las que empiezan por `VITE_` | Reiniciar el servidor de desarrollo tras modificar el fichero y respetar el prefijo `VITE_` |
-| 4 | *(completar con cualquier otro problema real que surja)* | | |
-
-> Los problemas marcados como *(completar)* están redactados a partir de los fallos habituales en este montaje. Sustituye o amplía la tabla con los que te ocurran realmente: el documento debe reflejar tu proceso.
+| 2 | `npm install --prefix backend` fallaba con `ENOENT: package.json` | En Windows, npm sigue buscando el `package.json` en el directorio actual aunque se indique `--prefix` | Sustituir esas instrucciones por `cd` a cada carpeta antes de ejecutar npm, que funciona igual en los tres sistemas operativos |
+| 3 | `curl` mostraba un aviso de riesgo de ejecución de script | En PowerShell, `curl` es un alias de `Invoke-WebRequest`, que analiza el contenido de la página | Usar `curl.exe`, que es el programa real, o `Invoke-RestMethod`, que además devuelve el JSON ya convertido |
+| 4 | Vite no arrancaba: `Cannot find native binding` | El `package-lock.json` se había generado en otro sistema operativo y no incluía el binario nativo de Rolldown para Windows | Eliminar `node_modules` y el lockfile y reinstalar las dependencias en la máquina de desarrollo. Además, en el `Dockerfile` del frontend se usa `npm install` en vez de `npm ci`, para que el contenedor Linux resuelva su propio binario |
+| 5 | Avisos `EBADENGINE` al instalar el frontend | Vite 8 requiere Node 20.19 o 22.12 en adelante, y la versión instalada era la 22.11 | Actualizar Node a la última versión LTS y corregir el requisito mínimo documentado en el `README.md` |
+| 6 | El `git pull` abortaba con «local changes would be overwritten» | Había cambios sin confirmar en el `README.md` al intentar actualizar la rama | Confirmar o guardar los cambios antes de actualizar. Se adopta la costumbre de ejecutar `git status` antes de cualquier `pull` o cambio de rama |
+| 7 | Los comandos encadenados con `&&` no funcionaban | Windows PowerShell 5.1 no admite ese operador, que sí está disponible en PowerShell 7 y en Bash | Escribir cada comando en su propia línea en toda la documentación |
 
 ---
 
