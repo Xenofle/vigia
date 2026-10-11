@@ -141,8 +141,9 @@ curl.exe http://localhost:4000/api/nada
 # {"error":"Recurso no encontrado","ruta":"/api/nada"}
 ```
 
-> **Captura 1 — Backend arrancado y respuesta de `/api/health`**
-> *(insertar aquí la captura: terminal con el servidor arrancado y la respuesta)*
+![Backend arrancado y respuesta de la API](img/backend-up.png)
+
+*Captura 1 — Backend arrancado y respuesta de `/api/health`.*
 
 ### 6.2 El frontend arranca
 
@@ -155,18 +156,21 @@ npm run dev
 
 Vite indica la URL local en la que queda disponible el cliente (http://localhost:5173).
 
-> **Captura 2 — Servidor de desarrollo de Vite arrancado**
-> *(insertar aquí la captura de la terminal mostrando la URL local)*
+![Servidor de desarrollo de Vite arrancado](img/vite-up.png)
+
+*Captura 2 — Servidor de desarrollo de Vite, con la URL local.*
 
 ### 6.3 Comunicación entre frontend y backend
 
 Con ambos servidores en marcha, al abrir http://localhost:5173 la aplicación realiza una petición a `/api/health` y muestra en pantalla los datos devueltos por el backend, lo que demuestra que las dos piezas se comunican.
 
-> **Captura 3 — Interfaz mostrando la respuesta de la API**
-> *(insertar aquí la captura del navegador con el indicador «API operativa» y los datos)*
+![Interfaz mostrando la respuesta de la API](img/navegador.png)
 
-> **Captura 4 — Pestaña de red del navegador**
-> *(la petición a `/api/health` con código 200, que prueba la comunicación de forma inequívoca)*
+*Captura 3 — Interfaz con el indicador «API operativa» y los datos devueltos por el backend.*
+
+![Petición a /api/health desde el navegador](img/health.png)
+
+*Captura 4 — Petición a `/api/health` con código 200, que prueba la comunicación entre ambas partes.*
 
 ### 6.4 Compilación de producción
 
