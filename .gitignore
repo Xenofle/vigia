@@ -1,29 +1,41 @@
-# Dependencias
-node_modules/
+# --- Python / Django ---
+piapp-env/
+__pycache__/
+*.py[cod]
+*$py.class
 
-# Variables de entorno (nunca se suben: solo se sube el .env.example)
+# Base de datos local
+*.sqlite3
+
+# Ficheros generados por Django
+backend/static/
+backend/media/
+
+# --- Node / React ---
+node_modules/
+dist/
+build/
+
+# --- Variables de entorno (solo se suben los .env.example) ---
 .env
 .env.local
 .env.*.local
 
-# Compilados
-dist/
-build/
-
-# Registros
+# --- Registros ---
 logs/
 *.log
 npm-debug.log*
 
-# Sistema operativo y editores
+# --- Sistema operativo y editores ---
 .DS_Store
 Thumbs.db
 .idea/
 .vscode/*
 !.vscode/extensions.json
+!.vscode/settings.json
 
-# Cobertura de pruebas
+# --- Cobertura de pruebas ---
 coverage/
 
-# Configuración personal de Claude Code (lo del equipo va en settings.json)
+# --- Configuración personal de Claude Code (lo del equipo va en settings.json) ---
 .claude/settings.local.json
