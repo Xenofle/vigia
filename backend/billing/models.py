@@ -23,7 +23,6 @@ class Cliente(models.Model):
    
 # UD3.3c - Modelo Factura: documento de cobro emitido a un cliente
 class Factura(models.Model):
-#UD3.3 - Modelo de Cobro: documento de cobro emitido a un cliente
 
     cliente = models.ForeignKey(Cliente, on_delete=models.PROTECT, verbose_name='Cliente')
     num_factura = models.CharField(verbose_name='N.º factura', max_length=20)
@@ -43,3 +42,20 @@ class Factura(models.Model):
     # UD3.3e - Representación textual: cliente y número de factura
     def __str__(self):
         return str(self.cliente) + ' - ' + self.num_factura
+    
+# UD3.3d - Modelo Cobro: pago, total o parcial, asociado a una factura
+class Cobro(models.Model):
+    factura = models.ForeignKey(Factura, on_delete=models.PROTECT, verbose_name='Factura')
+    fecha = models.DateField(verbose_name='Fecha', default=date.today)
+    importe = models.DecimalField(verbose_name='Importe', max_digits=10, decimal_places=2, default=0)
+
+    class Meta:
+        # UD3.4g - Nombre singular y plural del modelo en el administrador
+        verbose_name = 'Cobro'
+        verbose_name_plural = 'Cobros'
+        # UD3.4h - Ordenación por defecto de los registros, del más reciente al más antiguo
+        ordering = ['-fecha']
+
+    # UD3.3e - Representación textual: número de factura e importe
+    def __str__(self):
+        return self.factura.num_factura + ' - ' + str(self.importe)
