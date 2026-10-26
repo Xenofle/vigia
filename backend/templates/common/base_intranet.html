@@ -1,0 +1,24 @@
+{% extends "common/base.html" %}
+
+{% block content %}
+<div class="container-fluid mb-auto">
+  <div class="row">
+    {% block app-body %}
+        {% block slideout %}
+            {% include 'common/slideout_intranet.html' %}
+        {% endblock slideout %}
+
+        {% block main %}
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-5">
+
+                {% include 'common/messages.html' %}
+
+                {% block main_content %}
+                {% endblock main_content %}
+
+        </main>
+        {% endblock main %}
+    {% endblock app-body %}
+  </div>
+</div>
+{% endblock content %}

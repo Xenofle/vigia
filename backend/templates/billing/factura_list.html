@@ -1,0 +1,15 @@
+{% extends "common/base_intranet.html" %}
+
+
+{% block main_content %}
+<div class="container">
+    <h1>Lista de facturas</h1>
+    <ul class="list-group mt-3 ">
+    {% for factura in object_list %}
+        <a href="{% url 'factura_detail' factura.id %}" class="list-group-item list-group-item-action">{{ factura }}</a>
+    {% empty %}
+        <p>No existen facturas.</p>
+    {% endfor %}
+    </ul>
+</div>
+{% endblock main_content %}

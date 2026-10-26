@@ -1,0 +1,14 @@
+{% extends "common/base_intranet.html" %}
+
+{% block main_content %}
+<div class="container">
+    <h1>Lista de {{ object.verbose_name_plural }}</h1>
+    <ul class="list-group mt-3">
+    {% for cliente in object_list %}
+        <a href="{% url 'cliente_detail' pk=cliente.id %}" class="list-group-item list-group-item-action">{{ cliente }}</a>
+    {% empty %}
+        <p>No existen clientes.</p>
+    {% endfor %}
+    </ul>
+</div>
+{% endblock main_content %}

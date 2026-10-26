@@ -1,0 +1,16 @@
+{% if messages %}
+
+<div class="row mt-1 mt-md-0">
+    <div class="col-12 pl-md-4 pr-md-4">
+      {% for message in messages %}
+      <div {% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissible fade show mr-2 ml-2 mb-0 mb-md-1 text-center" {% endif %} role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+          {{ message|linebreaks }}
+      </div>
+      {% endfor %}
+    </div>
+</div>
+
+{% endif %}
