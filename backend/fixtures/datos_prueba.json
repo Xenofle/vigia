@@ -4,7 +4,7 @@
   "pk": 1,
   "fields": {
     "nombre": "Manuel",
-    "apellidos": "Pï¿½rez Soler",
+    "apellidos": "Pérez Soler",
     "nif": "92436593F",
     "email": "manuel.perez@example.com"
   }
@@ -14,7 +14,7 @@
   "pk": 2,
   "fields": {
     "nombre": "Pablo",
-    "apellidos": "Gonzï¿½lez Ruiz",
+    "apellidos": "González Ruiz",
     "nif": "74123456Z",
     "email": "pablo.gonzalez@example.com"
   }
@@ -24,7 +24,7 @@
   "pk": 3,
   "fields": {
     "nombre": "Laura",
-    "apellidos": "Martï¿½nez Gil",
+    "apellidos": "Martínez Gil",
     "nif": "53219876K",
     "email": "laura.martinez@example.com"
   }
@@ -34,7 +34,7 @@
   "pk": 4,
   "fields": {
     "nombre": "Sergio",
-    "apellidos": "Navarro Pï¿½rez",
+    "apellidos": "Navarro Pérez",
     "nif": "21436587T",
     "email": "sergio.navarro@example.com"
   }
@@ -44,7 +44,7 @@
   "pk": 5,
   "fields": {
     "nombre": "Ana",
-    "apellidos": "Gonzï¿½lez Lara",
+    "apellidos": "González Lara",
     "nif": "74987654M",
     "email": "ana.gonzalez@example.com"
   }
@@ -77,7 +77,7 @@
   "fields": {
     "cliente": 3,
     "num_factura": "F-2026-003",
-    "concepto": "Migraciï¿½n de PHP a Django",
+    "concepto": "Migración de PHP a Django",
     "fecha": "2026-10-26",
     "total": "9.00"
   }
@@ -88,7 +88,7 @@
   "fields": {
     "cliente": 4,
     "num_factura": "F-2026-004",
-    "concepto": "Consultorï¿½a de infraestructura",
+    "concepto": "Consultoría de infraestructura",
     "fecha": "2026-10-26",
     "total": "5.00"
   }
@@ -99,7 +99,7 @@
   "fields": {
     "cliente": 2,
     "num_factura": "F-2026-061",
-    "concepto": "Auditorï¿½a de seguridad",
+    "concepto": "Auditoría de seguridad",
     "fecha": "2026-10-26",
     "total": "0.50"
   }
@@ -121,7 +121,7 @@
   "fields": {
     "cliente": 5,
     "num_factura": "F-2026-011",
-    "concepto": "Formaciï¿½n en python",
+    "concepto": "Formación en python",
     "fecha": "2026-10-26",
     "total": "0.75"
   }
@@ -205,7 +205,7 @@
   "model": "core.servicio",
   "pk": 2,
   "fields": {
-    "nombre": "Tienda en lï¿½nea",
+    "nombre": "Tienda en línea",
     "descripcion": "",
     "slug": "tienda-en-linea",
     "orden": 2,
@@ -253,7 +253,7 @@
   "fields": {
     "servicio": 1,
     "creado_por": 1,
-    "nombre": "Panel de administraciï¿½n",
+    "nombre": "Panel de administración",
     "tipo": "http",
     "url": "https://www.example.com/admin",
     "host": null,
@@ -275,7 +275,7 @@
   "fields": {
     "servicio": 2,
     "creado_por": 1,
-    "nombre": "Pï¿½gina de inicio",
+    "nombre": "Página de inicio",
     "tipo": "http",
     "url": "https://tienda.example.com",
     "host": null,
@@ -430,7 +430,7 @@
     "incidencia": 1,
     "autor": 1,
     "estado": "investigando",
-    "mensaje": "Detectada la caï¿½da de la pasarela. Se estï¿½n revisando los registros del servidor.",
+    "mensaje": "Detectada la caída de la pasarela. Se están revisando los registros del servidor.",
     "creada_en": "2026-10-27T16:23:20.906Z"
   }
 },
