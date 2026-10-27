@@ -1,0 +1,470 @@
+[
+{
+  "model": "billing.cliente",
+  "pk": 1,
+  "fields": {
+    "nombre": "Manuel",
+    "apellidos": "P�rez Soler",
+    "nif": "92436593F",
+    "email": "manuel.perez@example.com"
+  }
+},
+{
+  "model": "billing.cliente",
+  "pk": 2,
+  "fields": {
+    "nombre": "Pablo",
+    "apellidos": "Gonz�lez Ruiz",
+    "nif": "74123456Z",
+    "email": "pablo.gonzalez@example.com"
+  }
+},
+{
+  "model": "billing.cliente",
+  "pk": 3,
+  "fields": {
+    "nombre": "Laura",
+    "apellidos": "Mart�nez Gil",
+    "nif": "53219876K",
+    "email": "laura.martinez@example.com"
+  }
+},
+{
+  "model": "billing.cliente",
+  "pk": 4,
+  "fields": {
+    "nombre": "Sergio",
+    "apellidos": "Navarro P�rez",
+    "nif": "21436587T",
+    "email": "sergio.navarro@example.com"
+  }
+},
+{
+  "model": "billing.cliente",
+  "pk": 5,
+  "fields": {
+    "nombre": "Ana",
+    "apellidos": "Gonz�lez Lara",
+    "nif": "74987654M",
+    "email": "ana.gonzalez@example.com"
+  }
+},
+{
+  "model": "billing.factura",
+  "pk": 1,
+  "fields": {
+    "cliente": 1,
+    "num_factura": "F-2026-001",
+    "concepto": "Desarrollo en PHP del portal corporativo",
+    "fecha": "2026-10-26",
+    "total": "150.00"
+  }
+},
+{
+  "model": "billing.factura",
+  "pk": 2,
+  "fields": {
+    "cliente": 1,
+    "num_factura": "F-2026-002",
+    "concepto": "Mantenimiento python mensual",
+    "fecha": "2026-10-26",
+    "total": "0.00"
+  }
+},
+{
+  "model": "billing.factura",
+  "pk": 3,
+  "fields": {
+    "cliente": 3,
+    "num_factura": "F-2026-003",
+    "concepto": "Migraci�n de PHP a Django",
+    "fecha": "2026-10-26",
+    "total": "9.00"
+  }
+},
+{
+  "model": "billing.factura",
+  "pk": 4,
+  "fields": {
+    "cliente": 4,
+    "num_factura": "F-2026-004",
+    "concepto": "Consultor�a de infraestructura",
+    "fecha": "2026-10-26",
+    "total": "5.00"
+  }
+},
+{
+  "model": "billing.factura",
+  "pk": 5,
+  "fields": {
+    "cliente": 2,
+    "num_factura": "F-2026-061",
+    "concepto": "Auditor�a de seguridad",
+    "fecha": "2026-10-26",
+    "total": "0.50"
+  }
+},
+{
+  "model": "billing.factura",
+  "pk": 6,
+  "fields": {
+    "cliente": 2,
+    "num_factura": "F-2026-062",
+    "concepto": "Scripts en python de despliegue",
+    "fecha": "2026-10-26",
+    "total": "75.00"
+  }
+},
+{
+  "model": "billing.factura",
+  "pk": 7,
+  "fields": {
+    "cliente": 5,
+    "num_factura": "F-2026-011",
+    "concepto": "Formaci�n en python",
+    "fecha": "2026-10-26",
+    "total": "0.75"
+  }
+},
+{
+  "model": "billing.cobro",
+  "pk": 1,
+  "fields": {
+    "factura": 1,
+    "fecha": "2026-10-26",
+    "importe": "100.00"
+  }
+},
+{
+  "model": "billing.cobro",
+  "pk": 2,
+  "fields": {
+    "factura": 2,
+    "fecha": "2026-10-26",
+    "importe": "7.50"
+  }
+},
+{
+  "model": "billing.cobro",
+  "pk": 3,
+  "fields": {
+    "factura": 3,
+    "fecha": "2026-10-26",
+    "importe": "9.00"
+  }
+},
+{
+  "model": "billing.cobro",
+  "pk": 4,
+  "fields": {
+    "factura": 5,
+    "fecha": "2026-10-26",
+    "importe": "0.50"
+  }
+},
+{
+  "model": "billing.cobro",
+  "pk": 5,
+  "fields": {
+    "factura": 6,
+    "fecha": "2026-10-26",
+    "importe": "60.00"
+  }
+},
+{
+  "model": "billing.cobro",
+  "pk": 6,
+  "fields": {
+    "factura": 7,
+    "fecha": "2026-10-26",
+    "importe": "0.75"
+  }
+},
+{
+  "model": "billing.cobro",
+  "pk": 7,
+  "fields": {
+    "factura": 4,
+    "fecha": "2026-10-26",
+    "importe": "5.00"
+  }
+},
+{
+  "model": "core.servicio",
+  "pk": 1,
+  "fields": {
+    "nombre": "Portal corporativo",
+    "descripcion": "",
+    "slug": "portal-corporativo",
+    "orden": 1,
+    "publico": true,
+    "creado_en": "2026-10-26T19:36:15.565Z"
+  }
+},
+{
+  "model": "core.servicio",
+  "pk": 2,
+  "fields": {
+    "nombre": "Tienda en l�nea",
+    "descripcion": "",
+    "slug": "tienda-en-linea",
+    "orden": 2,
+    "publico": true,
+    "creado_en": "2026-10-26T19:36:26.606Z"
+  }
+},
+{
+  "model": "core.servicio",
+  "pk": 3,
+  "fields": {
+    "nombre": "Servidor de correo",
+    "descripcion": "",
+    "slug": "servidor-de-correo",
+    "orden": 3,
+    "publico": false,
+    "creado_en": "2026-10-26T19:36:39.166Z"
+  }
+},
+{
+  "model": "core.monitor",
+  "pk": 1,
+  "fields": {
+    "servicio": 1,
+    "creado_por": 1,
+    "nombre": "Web principal",
+    "tipo": "http",
+    "url": "https://www.example.com",
+    "host": null,
+    "puerto": null,
+    "intervalo_segundos": 60,
+    "timeout_ms": 5000,
+    "reintentos": 3,
+    "umbral_latencia_ms": 2000,
+    "activo": true,
+    "publico": true,
+    "estado": "activo",
+    "estado_desde": "2026-10-27T16:16:59.935Z",
+    "fallos_consecutivos": 0
+  }
+},
+{
+  "model": "core.monitor",
+  "pk": 2,
+  "fields": {
+    "servicio": 1,
+    "creado_por": 1,
+    "nombre": "Panel de administraci�n",
+    "tipo": "http",
+    "url": "https://www.example.com/admin",
+    "host": null,
+    "puerto": null,
+    "intervalo_segundos": 60,
+    "timeout_ms": 5000,
+    "reintentos": 3,
+    "umbral_latencia_ms": 2000,
+    "activo": true,
+    "publico": true,
+    "estado": "activo",
+    "estado_desde": "2026-10-27T16:16:59.935Z",
+    "fallos_consecutivos": 0
+  }
+},
+{
+  "model": "core.monitor",
+  "pk": 3,
+  "fields": {
+    "servicio": 2,
+    "creado_por": 1,
+    "nombre": "P�gina de inicio",
+    "tipo": "http",
+    "url": "https://tienda.example.com",
+    "host": null,
+    "puerto": null,
+    "intervalo_segundos": 60,
+    "timeout_ms": 5000,
+    "reintentos": 3,
+    "umbral_latencia_ms": 2000,
+    "activo": true,
+    "publico": true,
+    "estado": "degradado",
+    "estado_desde": "2026-10-27T16:16:59.935Z",
+    "fallos_consecutivos": 0
+  }
+},
+{
+  "model": "core.monitor",
+  "pk": 4,
+  "fields": {
+    "servicio": 2,
+    "creado_por": 1,
+    "nombre": "Pasarela de pago",
+    "tipo": "http",
+    "url": "https://pagos.example.com/health",
+    "host": null,
+    "puerto": null,
+    "intervalo_segundos": 60,
+    "timeout_ms": 5000,
+    "reintentos": 3,
+    "umbral_latencia_ms": 2000,
+    "activo": true,
+    "publico": true,
+    "estado": "caido",
+    "estado_desde": "2026-10-27T16:16:59.935Z",
+    "fallos_consecutivos": 3
+  }
+},
+{
+  "model": "core.monitor",
+  "pk": 5,
+  "fields": {
+    "servicio": 3,
+    "creado_por": 1,
+    "nombre": "Puerto SMTP",
+    "tipo": "tcp",
+    "url": null,
+    "host": "mail.example.com",
+    "puerto": 25,
+    "intervalo_segundos": 60,
+    "timeout_ms": 5000,
+    "reintentos": 3,
+    "umbral_latencia_ms": 2000,
+    "activo": true,
+    "publico": true,
+    "estado": "activo",
+    "estado_desde": "2026-10-27T16:16:59.935Z",
+    "fallos_consecutivos": 0
+  }
+},
+{
+  "model": "core.monitor",
+  "pk": 6,
+  "fields": {
+    "servicio": 3,
+    "creado_por": 1,
+    "nombre": "Puerto IMAP",
+    "tipo": "tcp",
+    "url": null,
+    "host": "mail.example.com",
+    "puerto": 993,
+    "intervalo_segundos": 60,
+    "timeout_ms": 5000,
+    "reintentos": 3,
+    "umbral_latencia_ms": 2000,
+    "activo": true,
+    "publico": true,
+    "estado": "activo",
+    "estado_desde": "2026-10-27T16:16:59.935Z",
+    "fallos_consecutivos": 0
+  }
+},
+{
+  "model": "core.comprobacion",
+  "pk": 1,
+  "fields": {
+    "monitor": 2,
+    "ejecutada_en": "2026-10-26T19:45:10.210Z",
+    "correcta": true,
+    "latencia_ms": 120,
+    "codigo_http": 200,
+    "error": null
+  }
+},
+{
+  "model": "core.comprobacion",
+  "pk": 2,
+  "fields": {
+    "monitor": 2,
+    "ejecutada_en": "2026-10-26T19:45:10.221Z",
+    "correcta": true,
+    "latencia_ms": 2450,
+    "codigo_http": 200,
+    "error": null
+  }
+},
+{
+  "model": "core.comprobacion",
+  "pk": 3,
+  "fields": {
+    "monitor": 2,
+    "ejecutada_en": "2026-10-26T19:45:10.227Z",
+    "correcta": false,
+    "latencia_ms": null,
+    "codigo_http": 503,
+    "error": "Service Unavailable"
+  }
+},
+{
+  "model": "core.incidencia",
+  "pk": 1,
+  "fields": {
+    "servicio": 2,
+    "monitor": 4,
+    "titulo": "La pasarela de pago no responde",
+    "estado": "investigando",
+    "severidad": "critica",
+    "origen": "automatico",
+    "publica": true,
+    "abierta_en": "2026-10-27T16:22:15.673Z",
+    "cerrada_en": null
+  }
+},
+{
+  "model": "core.incidencia",
+  "pk": 2,
+  "fields": {
+    "servicio": 1,
+    "monitor": null,
+    "titulo": "Mantenimiento programado del portal",
+    "estado": "resuelta",
+    "severidad": "menor",
+    "origen": "manual",
+    "publica": true,
+    "abierta_en": "2026-10-27T16:22:45.481Z",
+    "cerrada_en": null
+  }
+},
+{
+  "model": "core.actualizacionincidencia",
+  "pk": 1,
+  "fields": {
+    "incidencia": 1,
+    "autor": 1,
+    "estado": "investigando",
+    "mensaje": "Detectada la ca�da de la pasarela. Se est�n revisando los registros del servidor.",
+    "creada_en": "2026-10-27T16:23:20.906Z"
+  }
+},
+{
+  "model": "core.actualizacionincidencia",
+  "pk": 2,
+  "fields": {
+    "incidencia": 1,
+    "autor": 1,
+    "estado": "identificado",
+    "mensaje": "El proveedor confirma una incidencia en su extremo.",
+    "creada_en": "2026-10-27T16:23:42.326Z"
+  }
+},
+{
+  "model": "core.actualizacionincidencia",
+  "pk": 3,
+  "fields": {
+    "incidencia": 2,
+    "autor": 1,
+    "estado": "monitorizando",
+    "mensaje": "Mantenimiento finalizado. Se vigila el comportamiento durante una hora.",
+    "creada_en": "2026-10-27T16:24:51.992Z"
+  }
+},
+{
+  "model": "core.actualizacionincidencia",
+  "pk": 4,
+  "fields": {
+    "incidencia": 2,
+    "autor": 1,
+    "estado": "resuelta",
+    "mensaje": "El servicio opera con normalidad.",
+    "creada_en": "2026-10-27T16:25:01.075Z"
+  }
+}
+]
