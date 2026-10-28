@@ -1,0 +1,31 @@
+{% extends "common/base_intranet.html" %}
+
+{% comment %} UD3.8a - Detalle de un servicio {% endcomment %}
+
+{% block main_content %}
+<div class="container">
+    <h1>Detalle del servicio</h1>
+
+    <dl class="row mt-3">
+        <dt class="col-sm-4">Nombre</dt>
+        <dd class="col-sm-8">{{ object.nombre }}</dd>
+
+        <dt class="col-sm-4">Descripción</dt>
+        <dd class="col-sm-8">{{ object.descripcion|default:"Sin descripción" }}</dd>
+
+        <dt class="col-sm-4">Identificador para la URL</dt>
+        <dd class="col-sm-8">{{ object.slug }}</dd>
+
+        <dt class="col-sm-4">Orden de aparición</dt>
+        <dd class="col-sm-8">{{ object.orden }}</dd>
+
+        <dt class="col-sm-4">Visible en la página pública</dt>
+        <dd class="col-sm-8">{{ object.publico|yesno:"Sí,No" }}</dd>
+
+        <dt class="col-sm-4">Fecha de creación</dt>
+        <dd class="col-sm-8">{{ object.creado_en }}</dd>
+    </dl>
+
+    <a href="{% url 'servicio_list' %}" class="btn btn-secondary">Volver al listado</a>
+</div>
+{% endblock main_content %}

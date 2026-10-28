@@ -1,0 +1,18 @@
+{% extends "common/base_intranet.html" %}
+
+{% comment %} UD3.8a - Listado de comprobaciones {% endcomment %}
+
+{% block main_content %}
+<div class="container">
+    <h1>Lista de comprobaciones</h1>
+    <ul class="list-group mt-3">
+    {% for comprobacion in object_list %}
+        <a href="{% url 'comprobacion_detail' comprobacion.id %}" class="list-group-item list-group-item-action">{{ comprobacion }}</a>
+    {% empty %}
+        <p>No existen comprobaciones.</p>
+    {% endfor %}
+    </ul>
+
+    {% include "common/paginacion.html" %}
+</div>
+{% endblock main_content %}

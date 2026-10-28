@@ -1,0 +1,34 @@
+{% extends "common/base_intranet.html" %}
+
+{% comment %} UD3.8a - Detalle de una comprobación {% endcomment %}
+
+{% block main_content %}
+<div class="container">
+    <h1>Detalle de la comprobación</h1>
+
+    <dl class="row mt-3">
+        <dt class="col-sm-4">Monitor</dt>
+        <dd class="col-sm-8">{{ object.monitor }}</dd>
+
+        <dt class="col-sm-4">Servicio</dt>
+        <dd class="col-sm-8">{{ object.monitor.servicio }}</dd>
+
+        <dt class="col-sm-4">Fecha de ejecución</dt>
+        <dd class="col-sm-8">{{ object.ejecutada_en }}</dd>
+
+        <dt class="col-sm-4">Resultado</dt>
+        <dd class="col-sm-8">{{ object.correcta|yesno:"Correcta,Fallida" }}</dd>
+
+        <dt class="col-sm-4">Latencia</dt>
+        <dd class="col-sm-8">{{ object.latencia_ms|default:"Sin medir" }} ms</dd>
+
+        <dt class="col-sm-4">Código HTTP</dt>
+        <dd class="col-sm-8">{{ object.codigo_http|default:"No aplica" }}</dd>
+
+        <dt class="col-sm-4">Error</dt>
+        <dd class="col-sm-8">{{ object.error|default:"Ninguno" }}</dd>
+    </dl>
+
+    <a href="{% url 'comprobacion_list' %}" class="btn btn-secondary">Volver al listado</a>
+</div>
+{% endblock main_content %}

@@ -1,0 +1,31 @@
+{% extends "common/base_intranet.html" %}
+
+{% comment %} UD3.8a - Detalle de una actualización de incidencia {% endcomment %}
+
+{% block main_content %}
+<div class="container">
+    <h1>Detalle de la actualización</h1>
+
+    <dl class="row mt-3">
+        <dt class="col-sm-4">Incidencia</dt>
+        <dd class="col-sm-8">{{ object.incidencia }}</dd>
+
+        <dt class="col-sm-4">Servicio afectado</dt>
+        <dd class="col-sm-8">{{ object.incidencia.servicio }}</dd>
+
+        <dt class="col-sm-4">Autor</dt>
+        <dd class="col-sm-8">{{ object.autor|default:"Sin autor registrado" }}</dd>
+
+        <dt class="col-sm-4">Estado</dt>
+        <dd class="col-sm-8">{{ object.get_estado_display }}</dd>
+
+        <dt class="col-sm-4">Mensaje</dt>
+        <dd class="col-sm-8">{{ object.mensaje }}</dd>
+
+        <dt class="col-sm-4">Fecha</dt>
+        <dd class="col-sm-8">{{ object.creada_en }}</dd>
+    </dl>
+
+    <a href="{% url 'actualizacion_list' %}" class="btn btn-secondary">Volver al listado</a>
+</div>
+{% endblock main_content %}

@@ -1,0 +1,61 @@
+{% extends "common/base_intranet.html" %}
+
+{% comment %} UD3.8a - Detalle de un monitor {% endcomment %}
+
+{% block main_content %}
+<div class="container">
+    <h1>Detalle del monitor</h1>
+
+    <dl class="row mt-3">
+        <dt class="col-sm-4">Servicio</dt>
+        <dd class="col-sm-8">{{ object.servicio }}</dd>
+
+        <dt class="col-sm-4">Creado por</dt>
+        <dd class="col-sm-8">{{ object.creado_por }}</dd>
+
+        <dt class="col-sm-4">Nombre</dt>
+        <dd class="col-sm-8">{{ object.nombre }}</dd>
+
+        <dt class="col-sm-4">Tipo</dt>
+        <dd class="col-sm-8">{{ object.get_tipo_display }}</dd>
+
+        <dt class="col-sm-4">URL</dt>
+        <dd class="col-sm-8">{{ object.url|default:"No aplica" }}</dd>
+
+        <dt class="col-sm-4">Host</dt>
+        <dd class="col-sm-8">{{ object.host|default:"No aplica" }}</dd>
+
+        <dt class="col-sm-4">Puerto</dt>
+        <dd class="col-sm-8">{{ object.puerto|default:"No aplica" }}</dd>
+
+        <dt class="col-sm-4">Intervalo</dt>
+        <dd class="col-sm-8">{{ object.intervalo_segundos }} segundos</dd>
+
+        <dt class="col-sm-4">Tiempo máximo de espera</dt>
+        <dd class="col-sm-8">{{ object.timeout_ms }} ms</dd>
+
+        <dt class="col-sm-4">Reintentos</dt>
+        <dd class="col-sm-8">{{ object.reintentos }}</dd>
+
+        <dt class="col-sm-4">Umbral de latencia</dt>
+        <dd class="col-sm-8">{{ object.umbral_latencia_ms }} ms</dd>
+
+        <dt class="col-sm-4">Activo</dt>
+        <dd class="col-sm-8">{{ object.activo|yesno:"Sí,No" }}</dd>
+
+        <dt class="col-sm-4">Visible en la página pública</dt>
+        <dd class="col-sm-8">{{ object.publico|yesno:"Sí,No" }}</dd>
+
+        <dt class="col-sm-4">Estado</dt>
+        <dd class="col-sm-8">{{ object.get_estado_display }}</dd>
+
+        <dt class="col-sm-4">Estado desde</dt>
+        <dd class="col-sm-8">{{ object.estado_desde|default:"Sin comprobaciones" }}</dd>
+
+        <dt class="col-sm-4">Fallos consecutivos</dt>
+        <dd class="col-sm-8">{{ object.fallos_consecutivos }}</dd>
+    </dl>
+
+    <a href="{% url 'monitor_list' %}" class="btn btn-secondary">Volver al listado</a>
+</div>
+{% endblock main_content %}

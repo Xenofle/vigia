@@ -1,0 +1,18 @@
+{% extends "common/base_intranet.html" %}
+
+{% comment %} UD3.8a - Listado de monitores {% endcomment %}
+
+{% block main_content %}
+<div class="container">
+    <h1>Lista de monitores</h1>
+    <ul class="list-group mt-3">
+    {% for monitor in object_list %}
+        <a href="{% url 'monitor_detail' monitor.id %}" class="list-group-item list-group-item-action">{{ monitor }}</a>
+    {% empty %}
+        <p>No existen monitores.</p>
+    {% endfor %}
+    </ul>
+
+    {% include "common/paginacion.html" %}
+</div>
+{% endblock main_content %}
