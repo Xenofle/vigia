@@ -21,28 +21,30 @@
             </a>
           </li>
           <hr>
+          {% comment %} UD3.8a - Enlaces a los listados de la aplicación core {% endcomment %}
           <li>
-            <a href="#" class="nav-link">
-              <span class="text-secondary">[ENLACE DE TU APP]</span>
+            <a href="{% url 'servicio_list' %}" class="nav-link">
+              <span class="text-secondary">Servicios</span>
             </a>
           </li>
           <li>
-            <a href="#" class="nav-link">
-              <span class="text-secondary">[ENLACE DE TU APP]</span>
-            </a>
-          </li>
-            <a href="#" class="nav-link">
-              <span class="text-secondary">[ENLACE DE TU APP]</span>
+            <a href="{% url 'monitor_list' %}" class="nav-link">
+              <span class="text-secondary">Monitores</span>
             </a>
           </li>
           <li>
-            <a href="#" class="nav-link">
-              <span class="text-secondary">[ENLACE DE TU APP]</span>
+            <a href="{% url 'comprobacion_list' %}" class="nav-link">
+              <span class="text-secondary">Comprobaciones</span>
             </a>
           </li>
           <li>
-            <a href="#" class="nav-link">
-              <span class="text-secondary">[ENLACE DE TU APP]</span>
+            <a href="{% url 'incidencia_list' %}" class="nav-link">
+              <span class="text-secondary">Incidencias</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'actualizacion_list' %}" class="nav-link">
+              <span class="text-secondary">Actualizaciones</span>
             </a>
           </li>
           <hr>
