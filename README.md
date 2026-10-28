@@ -9,140 +9,153 @@ Autor: José Javier Contreras Morillo
 ## Índice
 
 1. [Descripción](#descripción)
-2. [Justificación](#justificación)
+2. [Objetivos](#objetivos)
 3. [Tecnologías](#tecnologías)
-4. [Estructura del repositorio](#estructura-del-repositorio)
-5. [Requisitos previos](#requisitos-previos)
-6. [Puesta en marcha en local](#puesta-en-marcha-en-local)
-7. [Alternativa: arranque con Docker](#alternativa-arranque-con-docker)
-8. [Comandos disponibles](#comandos-disponibles)
-9. [Flujo de trabajo con Git](#flujo-de-trabajo-con-git)
-10. [Estado del proyecto](#estado-del-proyecto)
+4. [Esquema entidad-relación](#esquema-entidad-relación)
+5. [Estructura del repositorio](#estructura-del-repositorio)
+6. [Requisitos previos](#requisitos-previos)
+7. [Puesta en marcha en local](#puesta-en-marcha-en-local)
+8. [Alternativa: arranque con Docker](#alternativa-arranque-con-docker)
+9. [Comandos disponibles](#comandos-disponibles)
+10. [Tutorial de uso](#tutorial-de-uso)
+11. [Flujo de trabajo con Git](#flujo-de-trabajo-con-git)
+12. [Estado del proyecto](#estado-del-proyecto)
+13. [Enlaces del proyecto](#enlaces-del-proyecto)
+14. [Bitácora](#bitácora)
+15. [Bibliografía](#bibliografía)
 
 ---
 
 ## Descripción
 
-Cualquier organización que ofrece servicios en línea necesita saber si esos servicios funcionan, y enterarse antes de que se lo diga un cliente enfadado. Comprobarlo a mano no es viable y los productos comerciales del sector (UptimeRobot, Better Stack, Statuspage) resuelven exactamente ese problema.
+Cualquier organización que ofrece servicios en línea necesita saber si esos servicios funcionan, y enterarse antes de que se lo diga un cliente. Comprobarlo a mano no es viable, y existen productos comerciales dedicados a ello (UptimeRobot, Better Stack, Statuspage) que confirman que el problema es real.
 
 **Vigía** es una aplicación web que supervisa de forma automática y continua la disponibilidad de servicios web y servidores. El usuario da de alta monitores sobre una URL o un puerto, y el sistema los comprueba periódicamente en segundo plano, registrando el resultado y la latencia de cada comprobación.
 
-Cuando un monitor falla varias veces seguidas, el sistema lo marca como caído, abre una incidencia y envía un aviso por correo electrónico. El estado se refleja en tiempo real, sin recargar la página, en un panel de gestión privado.
+Cuando un monitor falla varias veces seguidas, el sistema lo marca como caído, abre una incidencia y envía un aviso por correo electrónico.
 
-Hay dos perfiles de usuario y, por tanto, dos interfaces: el **personal técnico**, que configura monitores y gestiona incidencias desde el panel privado; y el **usuario final**, que consulta una **página de estado pública** con el estado actual de cada servicio, el historial de disponibilidad de los últimos 90 días y las incidencias publicadas.
+Al tratarse de un servicio que se presta a terceros, la aplicación incorpora además un **módulo de facturación y cobro**, que gestiona los clientes a los que se factura la supervisión, sus facturas y los cobros asociados.
 
-## Justificación
+### Las dos caras de la aplicación
 
-La monitorización es una necesidad real de cualquier organización con servicios en línea, y existen productos comerciales equivalentes que validan el planteamiento. Desde el punto de vista académico, el proyecto obliga a trabajar procesos en segundo plano, gestión de series temporales, comunicación en tiempo real y despliegue con contenedores, que son competencias directamente aplicables en el entorno profesional.
+- **Zona de gestión privada**, accesible solo con el rol correspondiente, donde el personal técnico configura servicios y monitores, consulta el histórico, gestiona las incidencias y lleva la facturación.
+- **Página de estado pública**, sin autenticación, donde cualquier usuario consulta el estado actual de los servicios, el historial de disponibilidad de los últimos 90 días y las incidencias publicadas.
+
+El control de acceso se apoya en el sistema de autenticación de Django, con dos perfiles: **administrador**, que gestiona usuarios y permisos además del contenido, y **operador**, que gestiona servicios, monitores, incidencias y facturación pero no usuarios.
+
+## Objetivos
+
+**Objetivo general**
+
+Desarrollar y desplegar una aplicación web completa que permita definir monitores sobre servicios, comprobar su estado de forma automática y periódica, notificar los fallos, publicar el estado de los servicios y gestionar la facturación del servicio prestado.
+
+**Objetivos específicos**
+
+1. Diseñar un modelo de datos relacional preparado para el crecimiento de la información histórica.
+2. Implementar una zona de administración con control de acceso por roles.
+3. Implementar un proceso de comprobación periódica independiente de la atención de peticiones web.
+4. Aplicar una lógica de estados tolerante a fallos puntuales, basada en reintentos, que evite falsas alarmas.
+5. Ofrecer actualización en tiempo real de la información del panel.
+6. Implementar un sistema de notificaciones por correo electrónico ante cambios de estado.
+7. Gestionar clientes, facturas y cobros asociados al servicio prestado.
+8. Desarrollar dos interfaces diferenciadas, una privada y otra pública, con criterios de accesibilidad.
+9. Desplegar la aplicación mediante contenedores, con un flujo de integración continua.
 
 ---
 
 ## Tecnologías
 
-Resumen de la pila y, a continuación, la justificación de cada elección frente a la alternativa descartada.
-
 | Capa | Tecnología |
 |---|---|
-| Cliente | React 19 + Vite + Tailwind CSS 4 |
-| Servidor | Node.js 22 + Express 5 |
-| Base de datos | PostgreSQL 16 (a partir del Hito 2) |
+| Servidor | Python 3.13 + Django 5.2 |
+| Plantillas | Django Template Language + Bootstrap 5.2 |
+| Base de datos | SQLite en desarrollo; PostgreSQL prevista para el despliegue |
+| ORM | El de Django, con migraciones versionadas |
 | Contenedores | Docker + Docker Compose |
 | Control de versiones | Git · `main` + ramas de trabajo · Conventional Commits |
 
-### Guía de estilo / diseño
-
-**Tailwind CSS** con un conjunto propio de tokens de color, espaciado y tipografía definidos en el bloque `@theme`.
-
-El proyecto tiene dos interfaces con necesidades opuestas: un panel técnico denso, con mucha información por pantalla, y una página pública minimalista. Un framework de componentes cerrado como Bootstrap impondría el mismo aspecto a ambas y obligaría a pelearse con sus estilos. Tailwind aporta un sistema de utilidades coherente sin imponer componentes, de modo que los tokens se comparten entre las dos interfaces pero cada una mantiene su propio lenguaje visual.
-
-Los estados de servicio (activo, degradado, caído) se definen como tokens semánticos y no como colores sueltos, para garantizar el mismo significado en ambas interfaces y poder revisar el contraste en un único sitio (objetivo de accesibilidad AA).
-
 ### Backend
 
-**Node.js** con **Express**.
+**Django** aporta de serie dos piezas que este proyecto necesita y que de otro modo habría que construir: el sistema de autenticación con usuarios, grupos y permisos, y el panel de administración, que cubre directamente el requisito de disponer de una zona de gestión restringida por rol. Su ORM gestiona el esquema mediante migraciones versionadas, lo que mantiene la base de datos sincronizada con el código a lo largo del curso.
 
-Tres motivos concretos:
+Se emplea la **versión 5.2** y no la más reciente. Aunque existen versiones posteriores, la 5.2 es la última con soporte a largo plazo, lo que garantiza mantenimiento durante más tiempo y mayor compatibilidad con los paquetes de terceros. Elegir la última versión daría acceso a funcionalidades más nuevas a cambio de más errores y menos compatibilidad.
 
-1. El núcleo del proyecto es un proceso en segundo plano que lanza decenas de comprobaciones de red simultáneas. El modelo no bloqueante de Node encaja de forma natural con esa carga, que es de entrada y salida y no de cálculo.
-2. El sistema necesita comunicación en tiempo real mediante WebSocket; en Node es una integración directa en el mismo proceso que sirve la API.
-3. Se usa el mismo lenguaje en cliente y servidor, lo que reduce el coste de cambiar de contexto en un proyecto individual.
+### Organización en aplicaciones
 
-Se descartó **PHP con Laravel**, que es sólido para la parte de gestión, pero en el que los procesos de larga duración y el WebSocket requieren piezas adicionales (colas, Reverb o un servidor aparte) que complican el despliegue de un proyecto de este tamaño.
+El proyecto se divide en tres aplicaciones independientes, según la forma de modularizar propia de Django:
 
-**Express** frente a **NestJS**: NestJS aporta una estructura más rica, pero también una curva de aprendizaje que no se rentabiliza en un proyecto de un solo desarrollador. Se opta por Express con una estructura por capas definida a mano (rutas → servicios → repositorios).
+- **`core`** — la monitorización: servicios, monitores, comprobaciones e incidencias.
+- **`billing`** — la facturación: clientes, facturas y cobros.
+- **`common`** — código compartido entre las anteriores, plantillas base y navegación.
 
-El **motor de comprobaciones se ejecuta como servicio independiente** de la API, aunque comparta el código base y la imagen de contenedor. De esta forma, una comprobación lenta o un fallo del motor nunca afecta al tiempo de respuesta del panel.
+Esta separación permite que cada bloque sea autónomo y reutilizable, y mantiene la lógica de negocio dividida por responsabilidades.
 
-### Frontend
+### Presentación
 
-**React** con **Vite** como empaquetador.
+La zona de gestión se construye con el **motor de plantillas de Django** y **Bootstrap 5**, sobre una jerarquía de herencia de tres niveles: una plantilla base con la estructura común, una plantilla de intranet que añade el menú lateral, y las plantillas concretas de cada listado y detalle. Así, un cambio en la cabecera o en el pie afecta a todas las pantallas a la vez.
 
-React por el modelo declarativo: el panel recibe eventos de cambio de estado por WebSocket y la interfaz se actualiza sola a partir del estado, sin manipular el DOM a mano. Es además la tecnología con mayor demanda en el mercado laboral, lo que refuerza el objetivo formativo del proyecto.
-
-Vite frente a Webpack: arranque en desarrollo prácticamente inmediato, recarga en caliente muy rápida y configuración mínima. Webpack ofrece más control del que este proyecto necesita a cambio de bastante más configuración.
-
-Se descartó **Angular** por sobredimensionado para una sola persona, y **Vue** por decisión formativa (React tiene más recorrido profesional).
+Las vistas son **genéricas basadas en clases** (`ListView` y `DetailView`): Django consulta la base de datos y prepara el contexto, y la plantilla se limita a mostrarlo. Es la separación entre lógica de negocio y presentación llevada a la práctica.
 
 ### Base de datos
 
-**PostgreSQL** (modelo relacional).
+Se trabaja sobre **SQLite** durante el desarrollo, que es la base de datos que Django configura por defecto y resulta adecuada para un volumen reducido de datos. Para el despliegue está prevista la migración a **PostgreSQL**, por tratarse de un motor preparado para mayor volumen y concurrencia. El cambio no afecta al código, porque el acceso a datos se hace íntegramente a través del ORM.
 
-Los datos del sistema están fuertemente relacionados: monitores que pertenecen a servicios, comprobaciones que pertenecen a monitores, incidencias con actualizaciones y con servicios afectados. Un modelo relacional con claves foráneas garantiza la integridad de esas relaciones a nivel de motor y no de código.
+El modelo es **relacional** porque los datos están fuertemente relacionados y las claves foráneas garantizan la integridad a nivel de motor. Además, el proyecto se apoya en consultas de agregación sobre el histórico (disponibilidad, medias y percentiles de latencia), para las que SQL con índices compuestos es la herramienta adecuada. Se descarta un modelo documental porque el esquema es conocido y estable, y se perdería la integridad referencial.
 
-Además, el proyecto se apoya intensamente en consultas de agregación sobre el histórico (porcentaje de disponibilidad, medias y percentiles de latencia por intervalo). SQL, con funciones de ventana e índices compuestos, es la herramienta adecuada para eso.
+### Contenedores
 
-Se descartó **MongoDB**: la flexibilidad de esquema no aporta nada aquí, porque el esquema es conocido y estable, y en cambio se perdería la integridad referencial.
+**Docker** y **Docker Compose**, incorporados desde el inicio del desarrollo y no al final: conviene que el entorno de desarrollo y el de despliegue sean equivalentes.
 
-Se descartó también una base de datos específica de series temporales (**InfluxDB**, **TimescaleDB**): encajaría bien con la tabla de comprobaciones, pero obligaría a mantener dos motores de base de datos y a introducir una tecnología fuera del temario. El crecimiento del histórico se resuelve con índices compuestos y una tabla de agregados horarios.
+### Cliente público
 
-### Documentación
+La página de estado pública se desarrollará con **React** y **Vite**, por su modelo declarativo: recibe los cambios de estado y actualiza la interfaz a partir del estado, sin manipular el DOM a mano. La carpeta `frontend/` contiene el trabajo realizado hasta ahora y está en pausa mientras se define su encaje con las plantillas de Django.
 
-| Tipo | Herramienta |
-|---|---|
-| Documentación general del proyecto | Markdown en el propio repositorio (`/docs`) |
-| API REST | **OpenAPI 3** con interfaz **Swagger UI** servida por la propia API |
-| Código | **JSDoc** en servicios y en la lógica de estados |
-| Base de datos | Diagrama entidad-relación exportado a `/docs` |
+---
 
-La API se documenta con OpenAPI porque es el estándar del sector y permite probar los endpoints desde el navegador durante el desarrollo, sin depender de una herramienta externa.
+## Esquema entidad-relación
 
-### Librerías y dependencias relevantes
+### Entidades de monitorización (`core`)
 
-**Servidor**
+- **Servicio** — sistema supervisado. Agrupa monitores y dispone de página de estado pública.
+- **Monitor** — comprobación configurada sobre una URL o un puerto, con su intervalo y su estado actual.
+- **Comprobación** — resultado de cada ejecución de un monitor, con la latencia y el código de respuesta.
+- **Incidencia** — interrupción de servicio, abierta automáticamente al detectarse una caída o manualmente.
+- **Actualización de incidencia** — cada entrada de la cronología de una incidencia.
 
-| Librería | Función | Motivo |
-|---|---|---|
-| `express` | Framework HTTP | Minimalista y suficiente para una API REST |
-| `cors` | Control de orígenes | El cliente y la API se sirven en puertos distintos |
-| `dotenv` | Variables de entorno | Carga la configuración sin incrustarla en el código |
-| `prisma` | ORM y migraciones *(Hito 2)* | Tipado del modelo y migraciones reproducibles |
-| `jsonwebtoken` | Autenticación *(Hito 2)* | Sesión sin estado, adecuada para una API consumida por una SPA |
-| `argon2` | Cifrado de contraseñas *(Hito 2)* | Algoritmo recomendado actualmente frente a bcrypt |
-| `zod` | Validación de entrada *(Hito 2)* | Valida el cuerpo de las peticiones en un único punto |
-| `socket.io` | Tiempo real *(Hito 3)* | Reconexión automática y salas, frente a WebSocket nativo |
-| `nodemailer` | Envío de alertas *(Hito 3)* | Estándar de facto para SMTP en Node |
+### Entidades de facturación (`billing`)
 
-**Cliente**
+- **Cliente** — persona o entidad a la que se emiten facturas.
+- **Factura** — documento emitido a un cliente por el servicio prestado.
+- **Cobro** — pago, total o parcial, asociado a una factura.
 
-| Librería | Función | Motivo |
-|---|---|---|
-| `react` / `react-dom` | Interfaz | Modelo declarativo, idóneo para datos que cambian solos |
-| `vite` | Empaquetador y servidor de desarrollo | Arranque y recarga muy rápidos |
-| `tailwindcss` | Estilos | Ver apartado de guía de diseño |
-| `@tanstack/react-query` | Estado del servidor *(Hito 2)* | Caché y revalidación sin escribirlas a mano |
-| `recharts` | Gráficas *(Hito 3)* | Construida sobre componentes de React |
+### Relaciones
 
-**Calidad** *(a partir del Hito 2)*: `vitest` para pruebas unitarias, `supertest` para pruebas de integración de la API, y `eslint` con `prettier` para análisis estático y formato uniforme.
+```
+Usuario (1) ─────< (N) Monitor
 
-La planificación de las comprobaciones se implementará con un **planificador propio** basado en temporizadores, sin `BullMQ` ni Redis. Para el volumen previsto (unos 100 monitores con intervalo de 60 segundos) una cola distribuida añadiría un servicio más al despliegue y un concepto más que mantener, sin aportar nada. Queda documentado como línea de evolución si el volumen creciera.
+Servicio (1) ─────< (N) Monitor (1) ─────< (N) Comprobacion
+    │                      │
+    └──< (N) Incidencia <──┘ (opcional)
+                 │
+                 └──< (N) ActualizacionIncidencia
 
-### Otros: contenedores y despliegue
 
-**Docker** y **Docker Compose**, incorporados desde el inicio del desarrollo y no al final. El sistema se compone de varios servicios y Compose permite levantar el conjunto con un único comando, garantizando que el entorno de desarrollo y el de despliegue son equivalentes.
+Cliente (1) ─────< (N) Factura (1) ─────< (N) Cobro
+```
 
-**Integración continua:** GitHub Actions. En cada *push* se ejecutarán el análisis estático, las pruebas y la construcción de las imágenes.
+- Un **servicio** tiene muchos **monitores**; el nombre de un monitor no se repite dentro del mismo servicio.
+- Un **monitor** acumula muchas **comprobaciones**.
+- Un **servicio** puede tener varias **incidencias**, que referencian opcionalmente al monitor que las originó: la referencia queda a nulo en las abiertas manualmente.
+- Una **incidencia** tiene muchas **actualizaciones**, que forman su cronología.
+- Un **cliente** tiene muchas **facturas**, y una factura puede recibir varios **cobros** parciales.
 
-**Entorno de despliegue previsto:** servidor virtual privado con Docker y Nginx, certificado TLS mediante Let's Encrypt, variables de entorno en fichero `.env` fuera del repositorio y copia de seguridad diaria de la base de datos con `pg_dump`.
+### Decisiones de diseño
+
+El **estado actual** del monitor se almacena en la propia tabla de monitores en lugar de calcularse a partir del histórico. Es una desnormalización deliberada: mostrar el panel no puede implicar recorrer millones de filas de comprobaciones.
+
+La tabla de comprobaciones lleva un **índice compuesto** por monitor y fecha descendente, porque todas las consultas son del tipo «las últimas comprobaciones de este monitor».
+
+El comportamiento ante el **borrado** se decide por entidad: en cascada cuando el registro hijo carece de sentido sin el padre, protegido para impedir eliminar un cliente con facturas o un usuario con monitores a su nombre, y a nulo cuando el dato histórico debe sobrevivir aunque desaparezca la referencia.
 
 ---
 
@@ -150,25 +163,23 @@ La planificación de las comprobaciones se implementará con un **planificador p
 
 ```
 vigia/
-├── backend/            # API REST (Node + Express)
-│   ├── src/
-│   │   ├── config/     # carga y validación de variables de entorno
-│   │   ├── middlewares/
-│   │   ├── routes/
-│   │   ├── app.js      # construcción de la aplicación Express
-│   │   └── server.js   # arranque del servidor
-│   ├── .env.example
-│   └── Dockerfile
-├── frontend/           # Cliente web (React + Vite)
-│   ├── src/
-│   │   ├── api/        # cliente de la API
-│   │   ├── App.jsx
-│   │   └── main.jsx
-│   ├── .env.example
-│   └── Dockerfile
-├── docs/               # documentación técnica
-├── .env.example        # variables usadas por Docker Compose
-├── docker-compose.yml
+├── piapp-env/              # entorno virtual (no versionado)
+├── backend/
+│   ├── vigiaDjango/        # configuración: settings.py, urls.py
+│   ├── common/             # código compartido, vistas Home y Panel
+│   ├── core/               # monitorización
+│   ├── billing/            # facturación
+│   ├── templates/
+│   │   ├── common/         # plantillas base, panel, menú, paginación
+│   │   ├── core/           # listados y detalles de core
+│   │   └── billing/        # listados y detalles de billing
+│   ├── fixtures/           # datos de prueba
+│   ├── manage.py
+│   ├── requirements.txt
+│   ├── Dockerfile
+│   └── docker-compose.yml
+├── docs/                   # documentación técnica y capturas
+├── frontend/               # cliente React (en pausa)
 └── README.md
 ```
 
@@ -176,10 +187,10 @@ vigia/
 
 ## Requisitos previos
 
-| Herramienta | Versión mínima | Comprobación |
+| Herramienta | Versión | Comprobación |
 |---|---|---|
-| Node.js | 20.19 o 22.12 en adelante (lo exige Vite 8) | `node -v` |
-| npm | 10 | `npm -v` |
+| Python | 3.11 o superior (probado con 3.13) | `python --version` |
+| pip | incluido con Python | `pip --version` |
 | Git | 2.x | `git --version` |
 | Docker *(opcional)* | 24 | `docker --version` |
 
@@ -187,148 +198,107 @@ vigia/
 
 ## Puesta en marcha en local
 
-Los comandos están pensados para copiarse y pegarse en orden. Se necesitan **dos terminales**: una para el backend y otra para el frontend.
-
 ### 1. Clonar el repositorio
 
-```bash
+```powershell
 git clone https://github.com/Xenofle/vigia.git
 cd vigia
 ```
 
-### 2. Configurar las variables de entorno
+### 2. Crear y activar el entorno virtual
 
-```bash
-cp backend/.env.example backend/.env
-cp frontend/.env.example frontend/.env
+```powershell
+python -m venv piapp-env
+.\piapp-env\Scripts\Activate.ps1
 ```
 
-Valores por defecto, válidos para desarrollo sin tocar nada:
+El prompt debe empezar por `(piapp-env)`. Si PowerShell se niega a ejecutar el script de activación:
 
-| Fichero | Variable | Valor por defecto | Para qué sirve |
-|---|---|---|---|
-| `backend/.env` | `NODE_ENV` | `development` | Entorno de ejecución |
-| `backend/.env` | `PORT` | `4000` | Puerto en el que escucha la API |
-| `backend/.env` | `CORS_ORIGIN` | `http://localhost:5173` | Origen autorizado a llamar a la API |
-| `backend/.env` | `DATABASE_URL` | `postgresql://vigia:vigia@localhost:5432/vigia` | Conexión a PostgreSQL. **Aún no se usa**, se incorpora en el Hito 2 |
-| `frontend/.env` | `VITE_API_URL` | `http://localhost:4000/api` | URL base de la API que consume el cliente |
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+```
 
 ### 3. Instalar las dependencias
 
-```bash
+```powershell
 cd backend
-npm install
-cd ../frontend
-npm install
-cd ..
+pip install -r requirements.txt
 ```
 
 ### 4. Preparar la base de datos
 
-**No es necesario en este hito.** El proyecto todavía no tiene modelo de datos ni migraciones: el servicio de PostgreSQL está declarado en `docker-compose.yml` y la variable `DATABASE_URL` queda preparada para el Hito 2, pero la API arranca y funciona sin base de datos.
-
-### 5. Arrancar el backend
-
-En la primera terminal, desde la raíz del proyecto:
-
-```bash
-cd backend
-npm run dev
+```powershell
+python manage.py migrate
+python manage.py createsuperuser
 ```
 
-Queda disponible en **http://localhost:4000**, con el endpoint de comprobación en **http://localhost:4000/api/health**.
-
-### 6. Arrancar el frontend
-
-En la segunda terminal, también desde la raíz del proyecto:
-
-```bash
-cd frontend
-npm run dev
-```
-
-Queda disponible en **http://localhost:5173**.
-
-### 7. Comprobar que funciona
-
-**a) La API responde por sí sola:**
-
-```bash
-curl http://localhost:4000/api/health
-```
-
-En **PowerShell**, `curl` es un alias de `Invoke-WebRequest` y muestra un aviso de seguridad. Usa cualquiera de estas dos formas:
+Opcionalmente, cargar los datos de prueba incluidos en el repositorio:
 
 ```powershell
-curl.exe http://localhost:4000/api/health
-Invoke-RestMethod http://localhost:4000/api/health
+python manage.py loaddata fixtures/datos_prueba.json
 ```
 
-Respuesta esperada:
+### 5. Arrancar la aplicación
 
-```json
-{
-  "estado": "ok",
-  "servicio": "vigia-api",
-  "version": "0.1.0",
-  "entorno": "development",
-  "marcaDeTiempo": "2026-10-07T14:30:31.039Z",
-  "tiempoActivoSegundos": 2
-}
+```powershell
+python manage.py runserver
 ```
 
-**b) El frontend se comunica con la API:**
+La aplicación queda disponible en **http://localhost:8000/** y el administrador en **http://localhost:8000/admin/**.
 
-Abre **http://localhost:5173** en el navegador. Si la comunicación funciona, la tarjeta muestra el indicador verde **«API operativa»** junto con el servicio, la versión, el entorno y el tiempo activo que ha devuelto el backend.
+> **No arranques con `runserver 0.0.0.0:8000` en local.** En Windows, `localhost` se resuelve primero como IPv6 y la conexión se rechaza. Esa dirección solo se usa dentro del contenedor.
 
-Si en su lugar aparece el aviso rojo «No se ha podido contactar con la API», revisa que el backend esté arrancado en el puerto 4000 y que `VITE_API_URL` apunte a él. Tras cambiar un `.env`, reinicia el servidor de desarrollo correspondiente.
+### 6. Comprobar que funciona
+
+Entra en **http://localhost:8000/panel/** con el superusuario. Desde ahí se accede a los listados de las dos aplicaciones, y desde cada listado al detalle de cada registro.
 
 ---
 
 ## Alternativa: arranque con Docker
 
-Levanta la base de datos, la API y el cliente web con un solo comando:
-
-```bash
-cp .env.example .env
-docker compose up --build
+```powershell
+cd backend
+docker compose up --build        # primera vez
+docker compose up                # arranques posteriores
+docker compose down              # detener
 ```
 
-| Servicio | Contenedor | URL / puerto |
-|---|---|---|
-| `web` | `vigia-web` | http://localhost:5173 |
-| `api` | `vigia-api` | http://localhost:4000/api/health |
-| `db` | `vigia-db` | `localhost:5432` |
-
-`docker compose up --build` reconstruye las imágenes; en arranques posteriores basta con `docker compose up`. Para detenerlo todo:
-
-```bash
-docker compose down          # detiene y elimina los contenedores
-docker compose down -v       # además, borra el volumen de la base de datos
-```
-
-El servicio `api` espera a que PostgreSQL esté listo mediante un *healthcheck*, de modo que el orden de arranque es siempre correcto.
+El contenedor publica el puerto 8000 de la aplicación en el puerto indicado en `docker-compose.yml`. Requiere Docker Desktop en marcha.
 
 ---
 
 ## Comandos disponibles
 
-| Comando | Carpeta | Descripción |
-|---|---|---|
-| `npm run dev` | `backend` | Arranca la API con recarga automática (`node --watch`) |
-| `npm start` | `backend` | Arranca la API sin recarga (uso en contenedor) |
-| `npm run dev` | `frontend` | Servidor de desarrollo de Vite |
-| `npm run build` | `frontend` | Compila el cliente para producción en `dist/` |
-| `npm run preview` | `frontend` | Sirve localmente la compilación de producción |
+| Comando | Descripción |
+|---|---|
+| `python manage.py runserver` | Servidor de desarrollo |
+| `python manage.py check` | Valida configuración, modelos y administrador sin arrancar |
+| `python manage.py makemigrations` | Genera migraciones tras modificar los modelos |
+| `python manage.py migrate` | Aplica las migraciones pendientes |
+| `python manage.py createsuperuser` | Crea un usuario con acceso al administrador |
+| `python manage.py collectstatic` | Recolecta los ficheros estáticos |
+| `python manage.py shell` | Consola con la configuración del proyecto cargada |
+| `python manage.py dumpdata billing core --indent 2 --output fixtures/datos_prueba.json` | Exporta los datos de prueba |
+| `python manage.py loaddata fixtures/datos_prueba.json` | Restaura los datos de prueba |
+
+> Usa siempre la opción `--output` de `dumpdata`. La redirección `>` de PowerShell escribe el fichero en UTF-16 y `loaddata` no puede leerlo.
+
+---
+
+## Tutorial de uso
+
+*(Pendiente: recorrido por la aplicación con capturas de pantalla, en `docs/tutorial.md`.)*
+
+Las capturas del administrador y de los listados están en [`docs/img/`](docs/img/).
 
 ---
 
 ## Flujo de trabajo con Git
 
 - **`main`**: rama estable. No se trabaja directamente sobre ella; solo recibe código mediante *pull request*.
-- **Ramas de trabajo**: una por bloque funcional, con el prefijo correspondiente — `feat/<descripcion>`, `fix/<descripcion>`, `docs/<descripcion>`, `chore/<descripcion>` — que se integran en `main` cuando el bloque está terminado.
-- **Mensajes de commit**: [Conventional Commits](https://www.conventionalcommits.org/) en español.
-  Ejemplos: `feat(api): endpoint de comprobación de estado`, `docs(readme): instrucciones de arranque en local`.
+- **Ramas de trabajo**: una por bloque funcional, con prefijo `feat/`, `fix/`, `docs/` o `chore/`.
+- **Mensajes de commit**: [Conventional Commits](https://www.conventionalcommits.org/) en español, citando el código de tarea del boletín cuando corresponda.
+  Ejemplos: `feat(core): vistas y URLs de los cinco modelos (UD3.7)`, `fix(fixtures): regenera los datos con codificación UTF-8`.
 - **Etiquetas**: una por hito entregado (`hito-0`, `hito-1`, …).
 
 ---
@@ -338,10 +308,60 @@ El servicio `api` espera a que PostgreSQL esté listo mediante un *healthcheck*,
 | Hito | Contenido | Estado |
 |---|---|---|
 | Hito 0 | Repositorio y definición tecnológica | Completado |
-| Hito 1 | Boilerplate, arranque en local y documentación | Completado |
-| Hito 2 | Modelo de datos, autenticación y CRUD de monitores | Pendiente |
+| Hito 1 | Proyecto base funcionando en local y documentado | Completado |
+| Hito 2 | Modelo de datos, administración, ORM, vistas, URLs y plantillas | En curso |
+| Hito 3 | Motor de comprobaciones, histórico, alertas e incidencias | Pendiente |
+| Hito 4 | Página de estado pública y actualización en tiempo real | Pendiente |
+| Hito 5 | Despliegue, integración continua y documentación final | Pendiente |
 
-Documentación relacionada:
+---
 
-- [`docs/hito0-tecnologias.md`](docs/hito0-tecnologias.md) — entregable del Hito 0, con la definición tecnológica recogida también en este README.
+## Enlaces del proyecto
+
+| Recurso | Enlace |
+|---|---|
+| Anteproyecto (ClickUp) | *(pendiente de añadir)* |
+| Diseño de la aplicación | *(pendiente)* |
+| Landing page desplegada | *(pendiente)* |
+| Presentación en PDF | *(pendiente)* |
+| Vídeo explicativo | *(pendiente, para el checkpoint)* |
+
+---
+
+## Bitácora
+
+Registro de las tareas realizadas. El detalle completo, con estimaciones y estado, está en el espacio de ClickUp enlazado arriba.
+
+| Fecha | Tarea |
+|---|---|
+| Septiembre 2026 | Hito 0: creación del repositorio y definición tecnológica |
+| Octubre 2026 | Hito 1: proyecto base, arranque en local y documentación |
+| Octubre 2026 | Cambio de stack a Django, Docker y React por requisito del profesorado |
+| Octubre 2026 | Puesta a punto del proyecto Django con las aplicaciones `common`, `core` y `billing` |
+| Octubre 2026 | Modelos de datos, administrador y datos de prueba |
+| Octubre 2026 | Operaciones con el ORM |
+| Octubre 2026 | Vistas, URLs, plantillas y paginación |
+
+---
+
+## Documentación relacionada
+
+- [`docs/hito0-tecnologias.md`](docs/hito0-tecnologias.md) — definición tecnológica inicial del proyecto.
 - [`docs/instalacion.md`](docs/instalacion.md) — instalación del entorno, pruebas realizadas y problemas encontrados.
+
+---
+
+## Bibliografía
+
+- [Documentación oficial de Django 5.2](https://docs.djangoproject.com/en/5.2/)
+- [Modelos de Django](https://docs.djangoproject.com/en/5.2/topics/db/models/)
+- [Consultas con el ORM](https://docs.djangoproject.com/en/5.2/topics/db/queries/)
+- [Referencia de búsquedas en consultas](https://docs.djangoproject.com/en/5.2/ref/models/querysets/)
+- [El administrador de Django](https://docs.djangoproject.com/en/5.2/ref/contrib/admin/)
+- [Vistas genéricas basadas en clases](https://docs.djangoproject.com/en/5.2/topics/class-based-views/)
+- [Motor de plantillas de Django](https://docs.djangoproject.com/en/5.2/topics/templates/)
+- [Paginación](https://docs.djangoproject.com/en/5.2/topics/pagination/)
+- [Configuración de aplicaciones](https://docs.djangoproject.com/en/5.2/ref/applications/)
+- [Documentación de Bootstrap 5.2](https://getbootstrap.com/docs/5.2/)
+- [Documentación de Docker Compose](https://docs.docker.com/compose/)
+- [Conventional Commits](https://www.conventionalcommits.org/)
