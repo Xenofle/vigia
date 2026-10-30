@@ -23,19 +23,19 @@ def get_factura_0():
  
  
 # UD3.6a - Devuelve todos los clientes, excluyendo aquellos cuyo DNI empiece por "74"
-# (el nombre del mÃ©todo procede del enunciado; la condiciÃ³n es la descrita en el anexo)
+# (el nombre del método procede del enunciado; la condición es la descrita en el anexo)
 def get_cliente_not_0612():
     return Cliente.objects.exclude(nif__startswith='74')
  
  
-# UD3.6a - Devuelve los clientes cuyo DNI sea 92436593F y cuyos apellidos contengan "PÃ©rez"
+# UD3.6a - Devuelve los clientes cuyo DNI sea 92436593F y cuyos apellidos contengan "Pérez"
 def get_cliente_dni_apellido():
-    # Dos condiciones en el mismo filter se combinan con un Y lÃ³gico
-    return Cliente.objects.filter(nif='92436593F', apellidos__icontains='PÃ©rez')
+    # Dos condiciones en el mismo filter se combinan con un Y lógico
+    return Cliente.objects.filter(nif='92436593F', apellidos__icontains='Pérez')
  
  
-# UD3.6a - Devuelve las facturas cuyo id sea menor que 2, ordenadas por nÃºmero de factura descendente
-# (el nombre del mÃ©todo procede del enunciado, aunque la consulta devuelve facturas)
+# UD3.6a - Devuelve las facturas cuyo id sea menor que 2, ordenadas por número de factura descendente
+# (el nombre del método procede del enunciado, aunque la consulta devuelve facturas)
 def get_cli_id_lt_2_num_fact_des():
     return Factura.objects.filter(id__lt=2).order_by('-num_factura')
  
@@ -45,12 +45,12 @@ def get_cli_id_gt_2():
     return Cliente.objects.filter(id__gt=2)
  
  
-# UD3.6a - Devuelve las facturas cuyo concepto contenga "PHP", ordenadas por nÃºmero de factura ascendente
+# UD3.6a - Devuelve las facturas cuyo concepto contenga "PHP", ordenadas por número de factura ascendente
 def get_fact_des_nom_des():
     return Factura.objects.filter(concepto__icontains='PHP').order_by('num_factura')
  
  
-# UD3.6a - Devuelve todas las facturas, excluyendo aquellas cuyo nÃºmero acabe en "1"
+# UD3.6a - Devuelve todas las facturas, excluyendo aquellas cuyo número acabe en "1"
 def get_fact_not_1():
     return Factura.objects.exclude(num_factura__endswith='1')
  
@@ -65,10 +65,10 @@ def get_cobro_python_id2():
     ).first()
  
  
-# UD3.6a - Devuelve los cobros cuya factura contenga "06" en el nÃºmero,
+# UD3.6a - Devuelve los cobros cuya factura contenga "06" en el número,
 # excluyendo los del cliente cuyo nombre contenga "Manu"
 def get_cobro_fact6_not_manu():
-    # Dos saltos de relaciÃ³n: del cobro a la factura y de la factura al cliente
+    # Dos saltos de relación: del cobro a la factura y de la factura al cliente
     return Cobro.objects.filter(
         factura__num_factura__icontains='06',
     ).exclude(
@@ -86,9 +86,9 @@ def get_cobro_5_10():
     return Cobro.objects.filter(importe__range=(5, 10))
  
  
-# UD3.6a - Crea un cliente con nombre "Nuevo", apellidos "apellido1 apellido2" y un DNI vÃ¡lido
+# UD3.6a - Crea un cliente con nombre "Nuevo", apellidos "apellido1 apellido2" y un DNI válido
 def create_cliente():
-    # El NIF y el correo son Ãºnicos: ejecutar el mÃ©todo dos veces provoca un error de integridad
+    # El NIF y el correo son únicos: ejecutar el método dos veces provoca un error de integridad
     return Cliente.objects.create(
         nombre='Nuevo',
         apellidos='apellido1 apellido2',
@@ -112,11 +112,11 @@ def create_factura():
     )
  
  
-# UD3.6a - Concatena el texto "(Ãºltima)" al concepto de la Ãºltima factura
+# UD3.6a - Concatena el texto "(última)" al concepto de la última factura
 def update_last_factura():
-    # last() aplica el orden por defecto del modelo, que es el nÃºmero de factura
+    # last() aplica el orden por defecto del modelo, que es el número de factura
     factura = Factura.objects.last()
-    factura.concepto = factura.concepto + ' (Ãºltima)'
+    factura.concepto = factura.concepto + ' (última)'
     factura.save()
  
     return factura
@@ -132,17 +132,17 @@ def update_cobro_fact2_x2():
  
  
 # UD3.6a - Divide por 2 el importe de los cobros cuyas facturas acaben en "1"
-# y cuyo cliente contenga "GonzÃ¡lez" en los apellidos
+# y cuyo cliente contenga "González" en los apellidos
 def update_cobro_fact1_cligonz_div2():
     return Cobro.objects.filter(
         factura__num_factura__endswith='1',
-        factura__cliente__apellidos__icontains='GonzÃ¡lez',
+        factura__cliente__apellidos__icontains='González',
     ).update(importe=F('importe') / 2)
  
  
 # UD3.6a - Elimina los cobros cuyas facturas tengan un importe menor que 1
 def delete_cobro_fact_lt_1():
-    # delete() devuelve el nÃºmero de objetos eliminados
+    # delete() devuelve el número de objetos eliminados
     return Cobro.objects.filter(factura__total__lt=1).delete()
  
  
