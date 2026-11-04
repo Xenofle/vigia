@@ -1,0 +1,31 @@
+{
+    // Nombre del entorno (aparece en la esquina inferior izquierda de VS Code)
+    "name": "despliegue",
+    // Imagen base: Debian + PHP 8.4 + Composer + Git
+    "image": "mcr.microsoft.com/devcontainers/php:8.4",
+    // Desactivamos Xdebug: los comandos van más rápidos y sin avisos
+    "containerEnv": {
+        "XDEBUG_MODE": "off"
+    },
+    // Puertos del contenedor que VS Code redirige a tu ordenador
+    "forwardPorts": [
+        8000
+    ],
+    "portsAttributes": {
+        "8000": {
+            "label": "Backend Laravel"
+        }
+    },
+    // Evita el error de Git "dubious ownership" en algunos sistemas
+    "postCreateCommand": "sudo git config --system --add safe.directory '*'",
+    // Extensiones de VS Code que se instalan dentro del contenedor
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "laravel.vscode-laravel",
+                "bmewburn.vscode-intelephense-client",
+                "humao.rest-client"
+            ]
+        }
+    }
+}
