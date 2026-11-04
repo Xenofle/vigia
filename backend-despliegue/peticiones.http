@@ -1,0 +1,11 @@
+### Saludo sin nombre
+GET http://localhost:8000/api/hello
+Accept: application/json
+
+### Saludo con nombre
+GET http://localhost:8000/api/hello?name=Ana
+Accept: application/json
+
+### Nombre vacío
+GET http://localhost:8000/api/hello?name=
+Accept: application/json
