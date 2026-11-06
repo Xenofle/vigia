@@ -1,30 +1,36 @@
 {
-    // Nombre del entorno (aparece en la esquina inferior izquierda de VS Code)
     "name": "despliegue",
-    // Imagen base: Debian + PHP 8.4 + Composer + Git
     "image": "mcr.microsoft.com/devcontainers/php:8.4",
-    // Desactivamos Xdebug: los comandos van más rápidos y sin avisos
+    // NUEVO: instala Node.js (versión LTS) y npm dentro del contenedor
+    "features": {
+        "ghcr.io/devcontainers/features/node:2": {
+            "version": "lts"
+        }
+    },
     "containerEnv": {
         "XDEBUG_MODE": "off"
     },
-    // Puertos del contenedor que VS Code redirige a tu ordenador
+    // NUEVO: añadimos el puerto 5173 del servidor de Vite
     "forwardPorts": [
-        8000
+        8000,
+        5173
     ],
     "portsAttributes": {
         "8000": {
             "label": "Backend Laravel"
+        },
+        "5173": {
+            "label": "Frontend Vue"
         }
     },
-    // Evita el error de Git "dubious ownership" en algunos sistemas
     "postCreateCommand": "sudo git config --system --add safe.directory '*'",
-    // Extensiones de VS Code que se instalan dentro del contenedor
     "customizations": {
         "vscode": {
             "extensions": [
                 "laravel.vscode-laravel",
                 "bmewburn.vscode-intelephense-client",
-                "humao.rest-client"
+                "humao.rest-client",
+                "Vue.volar"
             ]
         }
     }
