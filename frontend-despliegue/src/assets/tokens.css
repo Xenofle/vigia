@@ -1,0 +1,60 @@
+/* Design tokens: valores de la guía de estilo elegida.
+   Material Design 3 — esquema base claro (semilla #6750A4). Ver DESIGN.md */
+:root {
+  /* Color */
+  --color-primary: #6750a4;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #eaddff;
+  --color-on-primary-container: #21005d;
+  --color-secondary: #625b71;               /* indicador de foco */
+  --color-surface: #fef7ff;
+  --color-on-surface: #1d1b20;
+  --color-on-surface-variant: #49454f;
+  --color-outline: #79747e;                 /* solo bordes, no texto */
+  --color-error: #b3261e;
+  --color-error-container: #f9dedc;
+  --color-on-error-container: #410e0b;
+
+  /* Capas de estado (opacidad del color "on" sobre el fondo) */
+  --state-hover: 8%;
+  --state-focus: 10%;
+  --state-pressed: 10%;
+  --state-disabled-container: 12%;
+  --state-disabled-content: 38%;
+
+  /* Tipografía */
+  --font-family: 'Roboto', system-ui, sans-serif;
+  --font-size-title: 1.75rem;               /* 28px — Headline Medium */
+  --line-height-title: 2.25rem;             /* 36px */
+  --font-size-title-section: 1.375rem;      /* 22px — Title Large */
+  --line-height-title-section: 1.75rem;     /* 28px */
+  --font-size-body: 1rem;                   /* 16px — Body Large */
+  --line-height-body: 1.5rem;               /* 24px */
+  --font-size-label: 0.875rem;              /* 14px — Label Large */
+  --line-height-label: 1.25rem;             /* 20px */
+  --font-size-supporting: 0.75rem;          /* 12px — texto de ayuda */
+  --line-height-supporting: 1rem;           /* 16px */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+
+  /* Espaciado (múltiplos de 4px) */
+  --space-xs: 4px;
+  --space-s: 8px;
+  --space-m: 16px;
+  --space-l: 24px;
+  --space-xl: 32px;
+
+  /* Forma */
+  --radius-xs: 4px;                         /* campos de texto */
+  --radius-m: 12px;                         /* tarjetas y avisos */
+  --radius-full: 9999px;                    /* botones (pill) */
+
+  /* Tamaños de componentes */
+  --button-height: 40px;
+  --field-height: 56px;
+  --touch-target: 48px;                     /* área táctil mínima */
+
+  /* Foco */
+  --focus-width: 3px;
+  --focus-offset: 2px;
+}

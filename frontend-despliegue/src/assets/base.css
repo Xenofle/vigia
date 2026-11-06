@@ -1,0 +1,21 @@
+@import './tokens.css';
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  font-weight: var(--font-weight-regular);
+  background: var(--color-surface);
+  color: var(--color-on-surface);
+}
+
+/* Accesibilidad: foco visible al navegar con teclado */
+:focus-visible {
+  outline: var(--focus-width) solid var(--color-secondary);
+  outline-offset: var(--focus-offset);
+}
