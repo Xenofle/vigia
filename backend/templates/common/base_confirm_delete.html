@@ -1,0 +1,17 @@
+{% extends "common/base_intranet.html" %}
+
+{% block main_content %}
+<div class="container">
+
+    {% comment %} UD4.2e - Título y mensaje de confirmación pasados por contexto {% endcomment %}
+    <h2 class="mb-4">{{ titulo }}</h2>
+
+    <form method="post">{% csrf_token %}
+        <p>{{ mensaje_confirmación }}</p>
+        {{ form }}
+        <input type="submit" value="Confirmar" class="btn btn-danger me-2">
+        <a class="btn btn-secondary" role="button" href="javascript:history.back()">Cancelar</a>
+    </form>
+
+</div>
+{% endblock main_content %}
