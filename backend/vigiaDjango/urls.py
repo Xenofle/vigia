@@ -44,6 +44,19 @@ urlpatterns = [
     path('incidencia_detail/<int:pk>/', core_views.IncidenciaDetailView.as_view(), name='incidencia_detail'),
     path('actualizacion_list/', core_views.ActualizacionIncidenciaListView.as_view(), name='actualizacion_list'),
     path('actualizacion_detail/<int:pk>/', core_views.ActualizacionIncidenciaDetailView.as_view(), name='actualizacion_detail'),
+    # UD4.2b - URLs de alta, modificación y baja de clientes
+    path('cliente_create/', billing_views.ClienteCreateView.as_view(), name='cliente_create'),
+    path('cliente_delete/<int:pk>/', billing_views.ClienteDeleteView.as_view(), name='cliente_delete'),
+    path('cliente_update/<int:pk>/', billing_views.ClienteUpdateView.as_view(), name='cliente_update'),
+        # UD4.2b - URLs de alta, modificación y baja de facturas
+    path('factura_create/', billing_views.FacturaCreateView.as_view(), name='factura_create'),
+    path('factura_update/<int:pk>/', billing_views.FacturaUpdateView.as_view(), name='factura_update'),
+    path('factura_delete/<int:pk>/', billing_views.FacturaDeleteView.as_view(), name='factura_delete'),
+
+    # UD4.2b - URLs de alta, modificación y baja de cobros
+    path('cobro_create/', billing_views.CobroCreateView.as_view(), name='cobro_create'),
+    path('cobro_update/<int:pk>/', billing_views.CobroUpdateView.as_view(), name='cobro_update'),
+    path('cobro_delete/<int:pk>/', billing_views.CobroDeleteView.as_view(), name='cobro_delete'),
 ]
 
 # UD3.2e - Servicio de los ficheros de medios mientras DEBUG está activo

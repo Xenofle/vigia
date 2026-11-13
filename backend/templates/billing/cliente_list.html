@@ -1,15 +1,19 @@
-{% extends "common/base_intranet.html" %}
+    {% extends "common/base_intranet.html" %}
 
-{% block main_content %}
-<div class="container">
-    <h1>Lista de {{ object.verbose_name_plural }}</h1>
-    <ul class="list-group mt-3">
-    {% for cliente in object_list %}
-        <a href="{% url 'cliente_detail' pk=cliente.id %}" class="list-group-item list-group-item-action">{{ cliente }}</a>
-    {% empty %}
-        <p>No existen clientes.</p>
-    {% endfor %}
-    </ul>
-        {% include "common/paginacion.html" %}
-</div>
-{% endblock main_content %}
+    {% block main_content %}
+    <div class="container">
+        <h1>Lista de clientes</h1>
+
+        {% comment %} UD4.2b - Acceso al alta de clientes {% endcomment %}
+        <a href="{% url 'cliente_create' %}" class="btn btn-success mt-3">Nuevo cliente</a>
+
+        <ul class="list-group mt-3">
+        {% for cliente in object_list %}
+            <a href="{% url 'cliente_detail' pk=cliente.id %}" class="list-group-item list-group-item-action">{{ cliente }}</a>
+        {% empty %}
+            <p>No existen clientes.</p>
+        {% endfor %}
+        </ul>
+            {% include "common/paginacion.html" %}
+    </div>
+    {% endblock main_content %}
