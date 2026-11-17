@@ -9,8 +9,8 @@
 
     <ul class="list-group mt-3">
     {% for factura in object_list %}
-        <a href="{% url 'factura_detail' pk=factura.id %}" class="list-group-item list-group-item-action">{{ factura }}</a>
-    {% empty %}
+        <a href="{% url 'factura_update' pk=factura.id %}" class="list-group-item list-group-item-action">{{ factura }}</a>    
+        {% empty %}
         <p>No existen facturas.</p>
     {% endfor %}
     </ul>

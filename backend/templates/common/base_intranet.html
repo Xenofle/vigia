@@ -11,18 +11,8 @@
         {% block main %}
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-5">
 
+                {% comment %} UD4.4a - Zona donde se muestran los mensajes del framework de mensajes {% endcomment %}
                 {% include 'common/messages.html' %}
-{% comment %} UD4.4a - Zona donde se muestran los mensajes del framework de mensajes {% endcomment %}
-                {% block messages %}
-                  {% if messages %}
-                    {% for message in messages %}
-                      <div {% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissible fade show" {% endif %} role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                      </div>
-                    {% endfor %}
-                  {% endif %}
-                {% endblock messages %}
 
                 {% block main_content %}
                 {% endblock main_content %}

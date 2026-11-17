@@ -5,10 +5,12 @@
 {% block main_content %}
 <div class="container">
     <h1>Lista de incidencias</h1>
+    {% comment %} UD4.2b - Acceso al alta de servicios {% endcomment %}
+    <a href="{% url 'incidencia_create' %}" class="btn btn-success mt-3">Nueva incidencia</a>
     <ul class="list-group mt-3">
     {% for incidencia in object_list %}
-        <a href="{% url 'incidencia_detail' incidencia.id %}" class="list-group-item list-group-item-action">{{ incidencia }}</a>
-    {% empty %}
+        <a href="{% url 'incidencia_update' incidencia.id %}" class="list-group-item list-group-item-action">{{ incidencia }}</a>    
+        {% empty %}
         <p>No existen incidencias.</p>
     {% endfor %}
     </ul>

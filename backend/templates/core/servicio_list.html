@@ -5,10 +5,12 @@
 {% block main_content %}
 <div class="container">
     <h1>Lista de servicios</h1>
+    {% comment %} UD4.2b - Acceso al alta de servicios {% endcomment %}
+    <a href="{% url 'servicio_create' %}" class="btn btn-success mt-3">Nuevo servicio</a>
     <ul class="list-group mt-3">
     {% for servicio in object_list %}
-        <a href="{% url 'servicio_detail' servicio.id %}" class="list-group-item list-group-item-action">{{ servicio }}</a>
-    {% empty %}
+        <a href="{% url 'servicio_update' servicio.id %}" class="list-group-item list-group-item-action">{{ servicio }}</a>    
+        {% empty %}
         <p>No existen servicios.</p>
     {% endfor %}
     </ul>

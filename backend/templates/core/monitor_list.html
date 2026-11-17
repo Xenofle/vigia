@@ -5,10 +5,12 @@
 {% block main_content %}
 <div class="container">
     <h1>Lista de monitores</h1>
+    {% comment %} UD4.2b - Acceso al alta de servicios {% endcomment %}
+    <a href="{% url 'monitor_create' %}" class="btn btn-success mt-3">Nuevo monitor</a>
     <ul class="list-group mt-3">
     {% for monitor in object_list %}
-        <a href="{% url 'monitor_detail' monitor.id %}" class="list-group-item list-group-item-action">{{ monitor }}</a>
-    {% empty %}
+        <a href="{% url 'monitor_update' monitor.id %}" class="list-group-item list-group-item-action">{{ monitor }}</a>    
+        {% empty %}
         <p>No existen monitores.</p>
     {% endfor %}
     </ul>

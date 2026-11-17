@@ -9,7 +9,7 @@
 
         <ul class="list-group mt-3">
         {% for cliente in object_list %}
-            <a href="{% url 'cliente_detail' pk=cliente.id %}" class="list-group-item list-group-item-action">{{ cliente }}</a>
+        <a href="{% url 'cliente_update' pk=cliente.id %}" class="list-group-item list-group-item-action">{{ cliente }}</a>        
         {% empty %}
             <p>No existen clientes.</p>
         {% endfor %}

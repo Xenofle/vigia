@@ -9,8 +9,8 @@
 
     <ul class="list-group mt-3">
     {% for cobro in object_list %}
-        <a href="{% url 'cobro_detail' pk=cobro.id %}" class="list-group-item list-group-item-action">{{ cobro }}</a>
-    {% empty %}
+        <a href="{% url 'cobro_update' pk=cobro.id %}" class="list-group-item list-group-item-action">{{ cobro }}</a>    
+        {% empty %}
         <p>No existen cobros.</p>
     {% endfor %}
     </ul>
