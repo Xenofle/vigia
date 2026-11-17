@@ -9,7 +9,7 @@ Function views
     2. Add a URL to urlpatterns:  path('', views.home, name='home')
 Class-based views
     1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
@@ -27,28 +27,24 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', common_views.HomeView.as_view(), name='home'),
     path('panel/', common_views.PanelView.as_view(), name='panel'),
+
     path('cliente_list/', billing_views.ClienteListView.as_view(), name='cliente_list'),
-    path('cliente_detail/<int:pk>/', billing_views.ClienteDetailView.as_view(), name='cliente_detail'),
     path('factura_list/', billing_views.FacturaListView.as_view(), name='factura_list'),
-    path('factura_detail/<int:pk>/', billing_views.FacturaDetailView.as_view(), name='factura_detail'),
     path('cobro_list/', billing_views.CobroListView.as_view(), name='cobro_list'),
-    path('cobro_detail/<int:pk>/', billing_views.CobroDetailView.as_view(), name='cobro_detail'),
+
     # UD3.7b - URLs de la aplicación core
     path('servicio_list/', core_views.ServicioListView.as_view(), name='servicio_list'),
-    path('servicio_detail/<int:pk>/', core_views.ServicioDetailView.as_view(), name='servicio_detail'),
     path('monitor_list/', core_views.MonitorListView.as_view(), name='monitor_list'),
-    path('monitor_detail/<int:pk>/', core_views.MonitorDetailView.as_view(), name='monitor_detail'),
     path('comprobacion_list/', core_views.ComprobacionListView.as_view(), name='comprobacion_list'),
-    path('comprobacion_detail/<int:pk>/', core_views.ComprobacionDetailView.as_view(), name='comprobacion_detail'),
     path('incidencia_list/', core_views.IncidenciaListView.as_view(), name='incidencia_list'),
-    path('incidencia_detail/<int:pk>/', core_views.IncidenciaDetailView.as_view(), name='incidencia_detail'),
     path('actualizacion_list/', core_views.ActualizacionIncidenciaListView.as_view(), name='actualizacion_list'),
-    path('actualizacion_detail/<int:pk>/', core_views.ActualizacionIncidenciaDetailView.as_view(), name='actualizacion_detail'),
+
     # UD4.2b - URLs de alta, modificación y baja de clientes
     path('cliente_create/', billing_views.ClienteCreateView.as_view(), name='cliente_create'),
-    path('cliente_delete/<int:pk>/', billing_views.ClienteDeleteView.as_view(), name='cliente_delete'),
     path('cliente_update/<int:pk>/', billing_views.ClienteUpdateView.as_view(), name='cliente_update'),
-        # UD4.2b - URLs de alta, modificación y baja de facturas
+    path('cliente_delete/<int:pk>/', billing_views.ClienteDeleteView.as_view(), name='cliente_delete'),
+
+    # UD4.2b - URLs de alta, modificación y baja de facturas
     path('factura_create/', billing_views.FacturaCreateView.as_view(), name='factura_create'),
     path('factura_update/<int:pk>/', billing_views.FacturaUpdateView.as_view(), name='factura_update'),
     path('factura_delete/<int:pk>/', billing_views.FacturaDeleteView.as_view(), name='factura_delete'),
@@ -57,6 +53,32 @@ urlpatterns = [
     path('cobro_create/', billing_views.CobroCreateView.as_view(), name='cobro_create'),
     path('cobro_update/<int:pk>/', billing_views.CobroUpdateView.as_view(), name='cobro_update'),
     path('cobro_delete/<int:pk>/', billing_views.CobroDeleteView.as_view(), name='cobro_delete'),
+
+    # UD4.2b - URLs de alta, modificación y baja de servicios
+    path('servicio_create/', core_views.ServicioCreateView.as_view(), name='servicio_create'),
+    path('servicio_update/<int:pk>/', core_views.ServicioUpdateView.as_view(), name='servicio_update'),
+    path('servicio_delete/<int:pk>/', core_views.ServicioDeleteView.as_view(), name='servicio_delete'),
+
+    # UD4.2b - URLs de alta, modificación y baja de monitores
+    path('monitor_create/', core_views.MonitorCreateView.as_view(), name='monitor_create'),
+    path('monitor_update/<int:pk>/', core_views.MonitorUpdateView.as_view(), name='monitor_update'),
+    path('monitor_delete/<int:pk>/', core_views.MonitorDeleteView.as_view(), name='monitor_delete'),
+
+    # UD4.2b - URLs de alta, modificación y baja de comprobaciones
+    path('comprobacion_create/', core_views.ComprobacionCreateView.as_view(), name='comprobacion_create'),
+    path('comprobacion_update/<int:pk>/', core_views.ComprobacionUpdateView.as_view(), name='comprobacion_update'),
+    path('comprobacion_delete/<int:pk>/', core_views.ComprobacionDeleteView.as_view(), name='comprobacion_delete'),
+
+    # UD4.2b - URLs de alta, modificación y baja de incidencias
+    path('incidencia_create/', core_views.IncidenciaCreateView.as_view(), name='incidencia_create'),
+    path('incidencia_update/<int:pk>/', core_views.IncidenciaUpdateView.as_view(), name='incidencia_update'),
+    path('incidencia_delete/<int:pk>/', core_views.IncidenciaDeleteView.as_view(), name='incidencia_delete'),
+
+    # UD4.2b - URLs de alta, modificación y baja de actualizaciones de incidencia
+    path('actualizacion_create/', core_views.ActualizacionIncidenciaCreateView.as_view(), name='actualizacion_create'),
+    path('actualizacion_update/<int:pk>/', core_views.ActualizacionIncidenciaUpdateView.as_view(), name='actualizacion_update'),
+    path('actualizacion_delete/<int:pk>/', core_views.ActualizacionIncidenciaDeleteView.as_view(), name='actualizacion_delete'),
+    
 ]
 
 # UD3.2e - Servicio de los ficheros de medios mientras DEBUG está activo
