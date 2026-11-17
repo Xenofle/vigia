@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
 from billing.models import Cliente, Factura, Cobro
 from billing.forms import ClienteForm, FacturaForm, CobroForm
@@ -14,11 +14,6 @@ class ClienteListView(OrdenacionMixin, ListView):
     template_name = 'billing/cliente_list.html'
     paginate_by = 10  # UD3.8b - Número de registros por página
 
-
-# UD3.7a - Detalle de un cliente
-class ClienteDetailView(DetailView):
-    model = Cliente
-    template_name = 'billing/cliente_detail.html'
 
 
 # UD4.2a - Atributos y comportamiento comunes al alta y la modificación de clientes
@@ -65,11 +60,6 @@ class FacturaListView(OrdenacionMixin, ListView):
     paginate_by = 10  # UD3.8b
 
 
-# UD3.7a - Detalle de una factura
-class FacturaDetailView(DetailView):
-    model = Factura
-    template_name = 'billing/factura_detail.html'
-
 
 # UD4.2a - Atributos y comportamiento comunes al alta y la modificación de facturas
 class FacturaMixin(CreateUpdateMixin):
@@ -112,11 +102,6 @@ class CobroListView(OrdenacionMixin, ListView):
     template_name = 'billing/cobro_list.html'
     paginate_by = 10  # UD3.8b
 
-
-# UD3.7a - Detalle de un cobro
-class CobroDetailView(DetailView):
-    model = Cobro
-    template_name = 'billing/cobro_detail.html'
 
 
 # UD4.2a - Atributos y comportamiento comunes al alta y la modificación de cobros
