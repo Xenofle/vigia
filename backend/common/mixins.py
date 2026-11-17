@@ -41,6 +41,8 @@ class BorradoMixin:
                 'Existen dependencias para el objeto {}. Elimine antes dichas dependencias'.format(str(self.object))
             )
             return HttpResponseRedirect(self.request.path)
+        
+        
 # UD4.2i - Permite reordenar un listado por id con el parámetro ordering de la URL
 class OrdenacionMixin:
 
