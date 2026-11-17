@@ -39,3 +39,4 @@ coverage/
 
 # --- Configuración personal de Claude Code (lo del equipo va en settings.json) ---
 .claude/settings.local.json
+

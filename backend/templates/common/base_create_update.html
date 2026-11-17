@@ -1,0 +1,27 @@
+{% extends "common/base_intranet.html" %}
+{% load crispy_forms_tags %}
+
+{% block main_content %}
+<div class="container">
+
+    {% comment %} UD4.2c - Título según el formulario esté en modo creación o actualización {% endcomment %}
+    {% if object %}
+        <h2 class="mb-4">{{ titulo_actualizacion }}</h2>
+    {% else %}
+        <h2 class="mb-4">{{ titulo_creacion }}</h2>
+    {% endif %}
+
+    {% comment %} UD4.4b - El formulario se inserta con los tags de crispy forms {% endcomment %}
+    <form method="post" novalidate>
+        {% crispy form %}
+
+        <input type="submit" class="btn btn-success me-2" value="{{ object|yesno:'Actualizar,Crear' }}">
+
+        {% comment %} UD4.2c - El botón de borrar solo aparece en modo actualización {% endcomment %}
+        {% if object %}
+            <a class="btn btn-danger" role="button" href="{% url url_borrado object.id %}">Eliminar</a>
+        {% endif %}
+    </form>
+
+</div>
+{% endblock main_content %}

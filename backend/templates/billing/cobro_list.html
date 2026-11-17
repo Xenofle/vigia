@@ -1,13 +1,16 @@
 {% extends "common/base_intranet.html" %}
 
-
 {% block main_content %}
 <div class="container">
     <h1>Lista de cobros</h1>
+
+    {% comment %} UD4.2b - Acceso al alta de cobros {% endcomment %}
+    <a href="{% url 'cobro_create' %}" class="btn btn-success mt-3">Nuevo cobro</a>
+
     <ul class="list-group mt-3">
     {% for cobro in object_list %}
-        <a href="{% url 'cobro_detail' cobro.id %}" class="list-group-item list-group-item-action">{{ cobro }}</a>
-    {% empty %}
+        <a href="{% url 'cobro_update' pk=cobro.id %}" class="list-group-item list-group-item-action">{{ cobro }}</a>    
+        {% empty %}
         <p>No existen cobros.</p>
     {% endfor %}
     </ul>

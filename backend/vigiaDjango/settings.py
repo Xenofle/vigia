@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 # UD3.2e - Importación de os para construir rutas del sistema de ficheros
 import os
 from pathlib import Path
+from django.contrib.messages import constants as messages
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -38,10 +40,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # UD4.4b - Aplicaciones de crispy forms para los formularios
+    'crispy_forms',
+    'crispy_bootstrap5',
     # UD3.2f - Aplicaciones propias del proyecto
     'common',
     'core',
     'billing',
+    
 ]
 
 MIDDLEWARE = [
@@ -133,3 +139,8 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# UD4.4b - Pack de plantillas de Bootstrap 5 para crispy forms
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+# UD4.4a - El código de error de Django es 'error' y la clase de Bootstrap es 'danger'
+MESSAGE_TAGS = {messages.ERROR: 'danger'}
