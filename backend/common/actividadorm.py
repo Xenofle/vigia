@@ -23,7 +23,6 @@ def get_factura_0():
  
  
 # UD3.6a - Devuelve todos los clientes, excluyendo aquellos cuyo DNI empiece por "74"
-# (el nombre del método procede del enunciado; la condición es la descrita en el anexo)
 def get_cliente_not_0612():
     return Cliente.objects.exclude(nif__startswith='74')
  
@@ -35,7 +34,6 @@ def get_cliente_dni_apellido():
  
  
 # UD3.6a - Devuelve las facturas cuyo id sea menor que 2, ordenadas por número de factura descendente
-# (el nombre del método procede del enunciado, aunque la consulta devuelve facturas)
 def get_cli_id_lt_2_num_fact_des():
     return Factura.objects.filter(id__lt=2).order_by('-num_factura')
  
