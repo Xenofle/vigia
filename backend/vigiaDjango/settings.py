@@ -173,3 +173,10 @@ AUTHENTICATION_BACKENDS = [
 # UD5.4 - El acceso se hace por correo, en coherencia con USERNAME_FIELD del modelo MyUser
 ACCOUNT_LOGIN_METHODS = {'email'}
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+
+# UD5.5 - Prefijo del asunto de los correos que envía allauth
+ACCOUNT_EMAIL_SUBJECT_PREFIX = '[Vigía] '
+
+# UD5.5 - En desarrollo los correos se escriben en la consola en lugar de enviarse
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'Vigía <no-reply@vigia.local>'

@@ -13,7 +13,13 @@
             {% comment %} UD5.2 - Formulario de acceso {% endcomment %}
             <form method="post" novalidate>
                 {% crispy form %}
+
                 <input type="submit" class="btn btn-primary" value="Entrar">
+
+                {% comment %} UD5.4 - Acceso al reseteo de contraseña que aporta allauth {% endcomment %}
+                <p class="mt-3">
+                    <a href="{% url 'account_reset_password' %}">¿Ha olvidado su contraseña?</a>
+                </p>
             </form>
 
         </div>
