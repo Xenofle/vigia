@@ -43,10 +43,15 @@ INSTALLED_APPS = [
     # UD4.4b - Aplicaciones de crispy forms para los formularios
     'crispy_forms',
     'crispy_bootstrap5',
+    # UD5.4 - Autenticación mediante django-allauth
+    'allauth',
+    'allauth.account',
     # UD3.2f - Aplicaciones propias del proyecto
     'common',
     'core',
     'billing',
+    # UD5.1a - Aplicación con el modelo de usuario propio
+    'usuarios',
     
 ]
 
@@ -58,7 +63,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # UD5.4 - Middleware requerido por django-allauth
+    'allauth.account.middleware.AccountMiddleware',
 ]
+
 
 ROOT_URLCONF = 'vigiaDjango.urls'
 
@@ -135,6 +143,12 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_URL = '/media/'
 
+# UD5.2 - Rutas de acceso y de redirección tras entrar o salir
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'panel'
+LOGOUT_REDIRECT_URL = 'login'
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
@@ -144,3 +158,18 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 # UD4.4a - El código de error de Django es 'error' y la clase de Bootstrap es 'danger'
 MESSAGE_TAGS = {messages.ERROR: 'danger'}
+
+# UD5.1 - Modelo de usuario propio del proyecto
+AUTH_USER_MODEL = 'usuarios.MyUser'
+
+# UD5.4 - Backends de autenticación
+AUTHENTICATION_BACKENDS = [
+    # Necesario para el acceso al administrador
+    'django.contrib.auth.backends.ModelBackend',
+    # Añadido por allauth para permitir el acceso por correo electrónico
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+# UD5.4 - El acceso se hace por correo, en coherencia con USERNAME_FIELD del modelo MyUser
+ACCOUNT_LOGIN_METHODS = {'email'}
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']

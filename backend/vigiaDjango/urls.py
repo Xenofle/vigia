@@ -15,13 +15,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
 
 from common import views as common_views
 from billing import views as billing_views
 from core import views as core_views
+from usuarios import views as usuarios_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -79,6 +80,11 @@ urlpatterns = [
     path('actualizacion_update/<int:pk>/', core_views.ActualizacionIncidenciaUpdateView.as_view(), name='actualizacion_update'),
     path('actualizacion_delete/<int:pk>/', core_views.ActualizacionIncidenciaDeleteView.as_view(), name='actualizacion_delete'),
     
+    # UD5.2 - URLs de acceso y cierre de sesión
+    path('login/', usuarios_views.LoginView.as_view(), name='login'),
+    path('logout/', usuarios_views.LogoutView.as_view(), name='logout'),
+    # UD5.4 - URLs de django-allauth, con su propia pantalla de acceso y el reseteo de contraseña
+    path('accounts/', include('allauth.urls')),
 ]
 
 # UD3.2e - Servicio de los ficheros de medios mientras DEBUG está activo
