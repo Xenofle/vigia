@@ -50,5 +50,13 @@
           <hr>
 
         </ul>
+        {% comment %} UD5.2 - Cierre de sesión {% endcomment %}
+          <hr>
+          <li class="nav-item">
+            <form method="post" action="{% url 'logout' %}">{% csrf_token %}
+              <button type="submit" class="btn btn-link nav-link text-secondary">Salir</button>
+            </form>
+          </li>
+
       </div>
     </nav>
