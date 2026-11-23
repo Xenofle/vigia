@@ -1,0 +1,22 @@
+{% extends "common/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-5">
+
+            <h2 class="mb-4">Acceso a Vigía</h2>
+
+            {% include 'common/messages.html' %}
+
+            {% comment %} UD5.2 - Formulario de acceso {% endcomment %}
+            <form method="post" novalidate>
+                {% crispy form %}
+                <input type="submit" class="btn btn-primary" value="Entrar">
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock content %}
