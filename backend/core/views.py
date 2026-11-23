@@ -183,11 +183,14 @@ class IncidenciaMixin(CreateUpdateMixin):
     def form_valid(self, form):
         if form.instance.cerrada_en is None:
             abiertas = Incidencia.objects.filter(
+            # Una incidencia abierta es la que no tiene fecha de cierre: se filtra por el nulo
+            # https://docs.djangoproject.com/en/5.2/ref/models/querysets/ (sección Field lookups, isnull)
                 servicio=form.instance.servicio, cerrada_en__isnull=True
             )
             if form.instance.pk:
                 abiertas = abiertas.exclude(pk=form.instance.pk)
-
+        # exists() comprueba si hay alguna fila sin traer los objetos a memoria
+        # https://docs.djangoproject.com/en/5.2/ref/models/querysets/#django.db.models.query.QuerySet.exists
             if abiertas.exists():
                 messages.error(
                     self.request,
