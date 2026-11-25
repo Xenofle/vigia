@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Lanza los servicios de desarrollo de Vigía en local con Docker.
+# Uso: ./dev-services {start|stop|restart}
+
+set -euo pipefail
+
+cd "$(dirname "$0")"
+
+COMPOSE_FILE="compose.dev.yml"
+PROJECT_NAME="vigia-dev"
+
+compose() {
+    docker compose -p "$PROJECT_NAME" -f "$COMPOSE_FILE" "$@"
+}
+
+start() {
+    compose up -d
+    compose ps
+}
+
+stop() {
+    compose stop
+}
+
+case "${1:-}" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    restart)
+        stop
+        start
+        ;;
+    *)
+        echo "Uso: ./dev-services {start|stop|restart}" >&2
+        exit 1
+        ;;
+esac
